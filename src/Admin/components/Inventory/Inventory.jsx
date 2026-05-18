@@ -1,8 +1,11 @@
 import React from 'react';
 import { Plus, Download, Upload, Pencil, Trash2, Search, Filter, Bell } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
 
 const InventoryDashboard = () => {
-  // Mock data representing the table in {C165585A-2E72-44D4-BC1F-4B40ACEE7DF8}.png
+
+  const navigate = useNavigate();
+  
   const inventory = [
     { id: 1, name: 'Cotton T-Shirt', variant: 'M / Black', sku: 'TSH001-BLK-M', qty: 45, reorder: 10, cost: 299, value: 13455, status: 'In Stock' },
     { id: 2, name: 'Formal Shirt', variant: 'L / Sky Blue', sku: 'FSH002-SKY-L', qty: 32, reorder: 8, cost: 599, value: 19168, status: 'In Stock' },
@@ -30,7 +33,9 @@ const InventoryDashboard = () => {
             <Bell className="text-slate-400 cursor-pointer" />
             <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">4</span>
           </div>
-          <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 font-medium hover:bg-indigo-700">
+          <button 
+          onClick={() => navigate('/admin/inventory/add')}
+          className="bg-indigo-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 font-medium hover:bg-indigo-700">
             <Plus size={18} /> Add Stock
           </button>
         </div>

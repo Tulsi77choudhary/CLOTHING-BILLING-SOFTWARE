@@ -1,8 +1,11 @@
 import React from 'react';
 import { Plus, Bell, User, Ticket, Tag, Percent, Gift } from 'lucide-react';
 import OfferTable from './OfferTable';
+import { useNavigate } from 'react-router-dom';
 
 const Offers = () => {
+
+  const navigate = useNavigate();
   const metrics = [
     {
       label: 'Total Offers',
@@ -56,7 +59,10 @@ const Offers = () => {
         </div>
 
         <div className="flex items-center gap-4">
-          <button className="bg-indigo-700 text-white px-5 py-2 rounded-lg flex items-center gap-2 text-sm font-semibold hover:bg-indigo-800 transition-all shadow-sm">
+
+          <button
+            onClick={() => navigate('/admin/offers/add')}
+            className="bg-indigo-700 text-white px-5 py-2 rounded-lg flex items-center gap-2 text-sm font-semibold hover:bg-indigo-800 transition-all shadow-sm">
             <Plus size={18} /> Add Offer
           </button>
 

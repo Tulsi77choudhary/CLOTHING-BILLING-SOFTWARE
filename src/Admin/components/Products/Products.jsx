@@ -1,4 +1,7 @@
 import React from "react";
+
+import { Link } from "react-router-dom";
+
 import {
   Box,
   Typography,
@@ -22,7 +25,7 @@ import {
   TableBody,
   Chip,
   Pagination,
-   PaginationItem
+  PaginationItem
 } from "@mui/material";
 
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
@@ -60,7 +63,7 @@ const rows = [
 const Products = () => {
   return (
     <Box sx={{ width: "100%", bgcolor: "#F8F9FC", minHeight: "100vh" }}>
-      {/* HEADER SECTION - Based on {A65B4A76-E879-4AB6-BBD6-6392DA26195C}.png */}
+      {/* HEADER SECTION */}
       <Box
         sx={{
           display: "flex",
@@ -181,6 +184,8 @@ const Products = () => {
             <Button
               variant="contained"
               startIcon={<AddIcon />}
+              component={Link}             // 👈 Instructs MUI to behave like a React Router Link
+              to="/admin/products/add"
               sx={{
                 bgcolor: "#4F46E5",
                 borderRadius: "12px",
@@ -394,63 +399,63 @@ const Products = () => {
         </TableContainer>
       </Paper>
 
-      <Box 
-      sx={{ 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'space-between', 
-        p: 2,
-        bgcolor: 'white',
-        borderTop: '1px solid #F3F4F6', // Table ke bottom se separation ke liye
-        borderBottomLeftRadius: '16px',
-        borderBottomRightRadius: '16px'
-      }}
-    >
-      {/* Left Side: Entry Info from {FBCB7A1A-A55B-4A66-A4AC-D97EDF3DB355}.png */}
-      <Typography 
-        variant="body2" 
-        sx={{ color: '#6B7280', fontWeight: 500 }}
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          p: 2,
+          bgcolor: 'white',
+          borderTop: '1px solid #F3F4F6', // Table ke bottom se separation ke liye
+          borderBottomLeftRadius: '16px',
+          borderBottomRightRadius: '16px'
+        }}
       >
-        Showing 1 to 7 of 256 products
-      </Typography>
+        {/* Left Side: Entry Info from {FBCB7A1A-A55B-4A66-A4AC-D97EDF3DB355}.png */}
+        <Typography
+          variant="body2"
+          sx={{ color: '#6B7280', fontWeight: 500 }}
+        >
+          Showing 1 to 7 of 256 products
+        </Typography>
 
-      {/* Right Side: Navigation */}
-      <Pagination 
-        count={37} 
-        shape="rounded" 
-        renderItem={(item) => (
-          <PaginationItem
-            slots={{ 
-              previous: ArrowBackIosNewIcon, 
-              next: ArrowForwardIosIcon 
-            }}
-            {...item}
-            sx={{
-              borderRadius: '8px',
-              fontWeight: 600,
-              fontSize: '0.85rem',
-              // Active Page Styling
-              '&.Mui-selected': {
-                bgcolor: '#6236FF',
-                color: 'white',
-                '&:hover': {
-                  bgcolor: '#5029D9',
+        {/* Right Side: Navigation */}
+        <Pagination
+          count={37}
+          shape="rounded"
+          renderItem={(item) => (
+            <PaginationItem
+              slots={{
+                previous: ArrowBackIosNewIcon,
+                next: ArrowForwardIosIcon
+              }}
+              {...item}
+              sx={{
+                borderRadius: '8px',
+                fontWeight: 600,
+                fontSize: '0.85rem',
+                // Active Page Styling
+                '&.Mui-selected': {
+                  bgcolor: '#6236FF',
+                  color: 'white',
+                  '&:hover': {
+                    bgcolor: '#5029D9',
+                  }
+                },
+                // Border for Prev/Next buttons
+                '&.MuiPaginationItem-previousNext': {
+                  border: '1px solid #E5E7EB',
+                  mx: 1
+                },
+                // Arrow icons size
+                '& .MuiPaginationItem-icon': {
+                  fontSize: '0.75rem',
                 }
-              },
-              // Border for Prev/Next buttons
-              '&.MuiPaginationItem-previousNext': {
-                border: '1px solid #E5E7EB',
-                mx: 1
-              },
-              // Arrow icons size
-              '& .MuiPaginationItem-icon': {
-                fontSize: '0.75rem',
-              }
-            }}
-          />
-        )}
-      />
-    </Box>
+              }}
+            />
+          )}
+        />
+      </Box>
     </Box>
   );
 };

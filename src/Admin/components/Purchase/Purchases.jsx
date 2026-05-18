@@ -1,5 +1,6 @@
 import React from 'react';
 import { Pencil, Trash2, Plus, Download } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
 
 const PurchaseTable = () => {
   const purchases = [
@@ -10,13 +11,17 @@ const PurchaseTable = () => {
     { id: 'PUR0003', date: '27/05/2024', supplier: 'Modern Clothing Co.', amount: '₹ 15,750', payment: 'Credit', status: 'Received' },
   ];
 
+  const navigate = useNavigate();
+
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       {/* Header Section */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Purchases</h1>
         <div className="flex gap-3">
-          <button className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
+          <button 
+          onClick={() => navigate('/admin/purchases/add')}
+          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
             <Plus size={18} /> New Purchase
           </button>
           <button className="flex items-center gap-2 border border-gray-300 bg-white px-4 py-2 rounded-md hover:bg-gray-50 transition">

@@ -17,6 +17,8 @@ import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import PeopleIcon from '@mui/icons-material/People';
 import SettingsIcon from '@mui/icons-material/Settings';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import UserStaff from "./components/UserStaff";
+import AddStock from "./components/Inventory/AddStock";
 
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -24,14 +26,23 @@ import { useNavigate, useLocation, Routes, Route } from "react-router-dom";
 
 import AdminDashboard from "./components/AdminDashboard/AdminDashboard";
 import Billing from "./components/Billing/Billing";
-import Products from "./components/Products";
-import Customers from "./components/Customers";
+import Products from "./components/Products/Products";
+import Customers from "./components/Customers/Customers";
 import Sales from "./components/Sales/Sales";
-import Purchases from "./components/Purchases";
-import Inventory from "./components/Inventory";
+import Purchases from "./components/Purchase/Purchases";
+import Inventory from "./components/Inventory/Inventory";
 import Reports from "./components/Reports";
-import Offers from "./components/Offers";
+import Offers from "./components/Offer/Offers";
 import Expenses from "./components/Expenses";
+import { Icon, User } from "lucide-react";
+import Settings from "./components/Setting";
+import Profile from "./components/Profile";
+import AddProducts from "./components/Products/AddProducts";
+import CustomerTable from "./components/Customers/CustomerTable";
+import AddCustomers from "./components/Customers/AddCustomers";
+import AddProduct from "./components/Sales/AddProduct";
+import AddPurchases from "./components/Purchase/AddPurchases";
+import AddOffer from "./components/Offer/AddOffer";
 
 const menu = [
   { name: "Dashboard", path: "/admin", Icon: <HomeIcon /> },
@@ -44,7 +55,7 @@ const menu = [
   { name: "Reports", path: "/admin/reports", Icon: <ReportIcon /> },
   { name: "Offers & Discounts", path: "/admin/offers", Icon: <LocalOfferIcon /> },
   { name: "Expenses", path: "/admin/expenses", Icon: <HomeIcon /> },
-  { name: "Users / Staff", path: "/admin/users", Icon: <PeopleIcon /> },
+  { name: "Users/Staff", path: "/admin/users", Icon: <PeopleIcon /> },
   { name: "Settings", path: "/admin/settings", Icon: <SettingsIcon /> },
 ];
 
@@ -190,14 +201,31 @@ function Admin() {
         <Routes>
           <Route path="/" element={<AdminDashboard />} />
           <Route path="billing" element={<Billing />} />
+
           <Route path="products" element={<Products />} />
+          <Route path="products/add" element={<AddProducts />} />
+
           <Route path="customers" element={<Customers />} />
+          <Route path="customers/add" element={<AddCustomers/>}></Route>
+
           <Route path="sales" element={<Sales />} />
-          <Route path="purchases" element={<Purchases/>}/>
-          <Route path="inventory" element={<Inventory/>} />
-          <Route path="reports" element={< Reports/>}/>
-          <Route path="offers" element={<Offers/>}></Route>
-          <Route path="expenses" element={<Expenses/>}/>
+          <Route path="product/add" element={<AddProduct/>}/>
+
+          <Route path="purchases" element={<Purchases />} />
+          <Route path="purchases/add" element={<AddPurchases/>}></Route>
+
+          <Route path="inventory" element={<Inventory />} />
+          <Route path="inventory/add" element={<AddStock/>}></Route>
+
+          <Route path="reports" element={< Reports />} />
+
+          <Route path="offers" element={<Offers />} />
+          <Route path="offers/add" element={<AddOffer/>}/>
+
+          <Route path="expenses" element={<Expenses />} />
+          <Route path="users" element={<UserStaff />} />
+          <Route path="settings" element={<Settings />} />
+          <Route path="profile" element={<Profile />} />
         </Routes>
       </Box>
     </Box>

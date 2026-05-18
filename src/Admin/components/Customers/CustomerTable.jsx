@@ -1,5 +1,6 @@
 import React from 'react';
 import { Search, Filter, Plus, Download, Eye, Edit, Trash2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const CustomerTable = () => {
   const customers = [
@@ -9,6 +10,8 @@ const CustomerTable = () => {
     { id: 2, customerId: 'CU0002', name: 'Sunita Sharma', phone: '+91 8765432109', email: 'sunita@gmail.com', group: 'Premium', totalPurchase: '₹ 8,760', outstanding: '₹ 0', status: 'Active' },
 
   ];
+
+  const navigate = useNavigate();
 
   return (
     <div className="p-4 bg-white rounded-xl shadow-sm border border-gray-100 mt-2">
@@ -35,7 +38,9 @@ const CustomerTable = () => {
         </div>
 
         <div className="flex items-center gap-3">
-          <button className="flex items-center gap-2 bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-800 transition-colors">
+          <button 
+          onClick={() => navigate('/admin/customers/add')}
+          className="flex items-center gap-2 bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-800 transition-colors">
             <Plus size={18} /> Add Customer
           </button>
           <button className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50">

@@ -4,6 +4,7 @@ import {
     Minus,FileText, Trash2, Wallet, CreditCard, Banknote,
     Smartphone, Repeat, ShoppingBag
 } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
 
 const actions = [
     {
@@ -56,6 +57,7 @@ const CreateSale = () => {
         { id: 4, name: "Casual Sneakers", sku: "SN001", size: "8", color: "White", price: 1999, qty: 1, disc: 0, tax: 5, img: "/shoes.png" },
     ]);
 
+    const navigate = useNavigate();
     const [paymentMethod, setPaymentMethod] = useState('Cash');
 
     return (
@@ -111,7 +113,9 @@ const CreateSale = () => {
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                         <input type="text" placeholder="Scan barcode or search product..." className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm" />
                     </div>
-                    <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2">
+                    <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2"
+                    onClick={() => navigate('/admin/product/add')}>
+  
                         <Plus size={16} /> Add Product
                     </button>
                 </div>

@@ -6,17 +6,17 @@ import CheckroomRoundedIcon from "@mui/icons-material/CheckroomRounded";
 import DryCleaningRoundedIcon from "@mui/icons-material/DryCleaningRounded";
 import BackpackRoundedIcon from "@mui/icons-material/BackpackRounded";
 
-// Styled component for hiding scrollbar
+
 const ScrollContainer = styled(Box)({
   display: "flex",
   alignItems: "center",
   gap: "12px",
   overflowX: "auto",
   padding: "10px 5px",
-  msOverflowStyle: "none", // IE and Edge
-  scrollbarWidth: "none", // Firefox
+  msOverflowStyle: "none", 
+  scrollbarWidth: "none", 
   "&::-webkit-scrollbar": {
-    display: "none", // Chrome, Safari, Opera
+    display: "none", 
   },
 });
 
