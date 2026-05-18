@@ -7,21 +7,19 @@ import Register from '../components/Auth/RegisterForm'
 import Login from '../components/Auth/LoginForm'
 import { AddressBookIcon } from '@phosphor-icons/react'
 
+import Navigation from '../components/Navigation/Navigation'
+
+
 export const CustomerRoutes = () => {
   return (
     <div>
-
       <Navbar />
-
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-
       </Routes>
-
       <Footer />
-      
     </div>
   )
 }

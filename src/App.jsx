@@ -1,16 +1,22 @@
-import React from "react";
-import { Routes, Route, BrowserRouter } from "react-router-dom";
-import CustomerRouters from "../../Clothing-Billing-Software/src/Routers/CustomerRouters";
-import AdminRouters from "../../Clothing-Billing-Software/src/Routers/AdminRouters";
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import CustomerRouters from './Routers/CustomerRouters'
+import AdminRouters from './Routers/AdminRouters'
+import './App.css'
+
 function App() {
+
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/*" element={<CustomerRouters />} />
-        <Route path="/admin/*" element={<AdminRouters />} />
+        <Route path='/admin/*' element={<AdminRouters/>}></Route>
+        
       </Routes>
     </BrowserRouter>
   );
+
 }
 
-export default App;
+export default App
