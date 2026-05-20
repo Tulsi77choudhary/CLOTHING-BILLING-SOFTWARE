@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, UserPlus, Info, Save, X } from "lucide-react";
+import { ArrowLeft, UserPlus, Save, X } from "lucide-react";
 
 const AddCustomers = () => {
   const navigate = useNavigate();
 
-  // Table structure ke columns ke hisab se state initialize ki hai
   const [formData, setFormData] = useState({
-    customerId: "CU" + Math.floor(1000 + Math.random() * 9000), // Auto-generated default ID
+    customerId: "CU" + Math.floor(1000 + Math.random() * 9000), 
     name: "",
     phone: "",
     email: "",
+    total: "",
+    outstanding: "",
     group: "Regular",
     status: "Active"
   });
@@ -26,13 +27,12 @@ const AddCustomers = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Saving New Customer Data:", formData);
-    // Yahan aap apna backend API hit kar sakte hain ya parent context state update kar sakte hain
-    navigate("/admin/customers"); // Form submit hone ke baad wapas table par bheje ga
+    navigate("/admin/customers");
   };
 
   return (
     <div className="w-full bg-[#FAFBFD] min-h-screen p-6">
-      
+
       {/* Top Header Card */}
       <div className="flex items-center justify-between mb-6 bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
         <div className="flex items-center gap-3">
@@ -54,15 +54,15 @@ const AddCustomers = () => {
 
       {/* Main Input Form Container */}
       <form onSubmit={handleSubmit} className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden max-w-4xl">
-        
+
         <div className="p-6 space-y-6">
           <h3 className="text-sm font-bold text-gray-800 uppercase tracking-wider pb-1 border-b border-gray-50">
             Account Profile Mapping
           </h3>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            
-            {/* Customer ID (Read Only / Automatic Generation style) */}
+
+            {/* Customer ID (Read Only) */}
             <div>
               <label className="block text-xs font-semibold text-gray-600 mb-1.5">Customer ID</label>
               <input
@@ -129,7 +129,7 @@ const AddCustomers = () => {
               </select>
             </div>
 
-            {/* Account Status Segment */}
+            {/* Profile Status */}
             <div>
               <label className="block text-xs font-semibold text-gray-600 mb-1.5">Profile Status</label>
               <select
@@ -143,31 +143,52 @@ const AddCustomers = () => {
               </select>
             </div>
 
+            {/* FIXED: Total Purchase */}
+            <div>
+              <label className="block text-xs font-semibold text-gray-600 mb-1.5">Total Purchase (₹)</label>
+              <input
+                type="number"
+                name="total"
+                value={formData.total}
+                onChange={handleChange}
+                placeholder="e.g. 5000"
+                className="w-full px-3 py-2 text-sm bg-gray-50/50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#9155FD]/10 focus:border-[#9155FD] text-gray-800 transition-shadow"
+              />
+            </div>
+
+            {/* FIXED: Outstanding */}
+            <div>
+              <label className="block text-xs font-semibold text-gray-600 mb-1.5">Outstanding (₹)</label>
+              <input
+                type="number"
+                name="outstanding"
+                value={formData.outstanding}
+                onChange={handleChange}
+                placeholder="e.g. 1200"
+                className="w-full px-3 py-2 text-sm bg-gray-50/50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#9155FD]/10 focus:border-[#9155FD] text-gray-800 transition-shadow"
+              />
+            </div>
+
           </div>
         </div>
 
-        {/* Form Action Footer Control Panel */}
-        <div className="bg-gray-50/70 p-4 border-t border-gray-100 flex flex-wrap items-center justify-between gap-4">
-          <span className="text-xs text-gray-400 flex items-center gap-1">
-            <Info size={14} className="text-gray-300 shrink-0" /> Asterisk (*) mark wale fields mandatory hain.
-          </span>
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={() => navigate("/admin/customers")}
-              className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-gray-600 hover:text-gray-800 bg-white hover:bg-gray-50 rounded-lg border border-gray-200 transition-colors shadow-sm"
-            >
-              <X size={16} /> Cancel
-            </button>
-            <button
-              type="submit"
-              className="flex items-center gap-1.5 px-5 py-2 text-sm font-semibold text-white bg-[#9155FD] hover:bg-[#8046e6] rounded-lg transition-colors shadow-sm"
-            >
-              <Save size={16} /> Save Record
-            </button>
-          </div>
+        {/* --- Action Buttons (Footer) --- */}
+        <div className="bg-gray-50/70 px-6 py-4 flex items-center justify-end gap-3 border-t border-gray-100">
+          <button
+            type="button"
+            onClick={() => navigate("/admin/customers")}
+            className="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg transition-colors flex items-center gap-1.5"
+          >
+            <X size={16} /> Cancel
+          </button>
+          <button
+            type="submit"
+            className="px-5 py-2 text-sm font-medium text-white bg-[#9155FD] hover:bg-[#7e3ff2] rounded-lg shadow-sm transition-all active:scale-95 flex items-center gap-1.5"
+          >
+            <Save size={16} /> Save Customer
+          </button>
         </div>
-
+        
       </form>
     </div>
   );

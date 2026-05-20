@@ -76,18 +76,21 @@ const Home = () => {
                     {/* Buttons */}
                     <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
 
-                        <button className="bg-purple-600 text-white px-7 py-3 rounded-xl hover:bg-purple-700 transition duration-300 shadow-md w-full sm:w-auto">
+                        <button
+                            className="bg-purple-600 text-white px-7 py-3 rounded-xl hover:bg-purple-700 transition duration-300 shadow-md w-full sm:w-auto">
                             Request Demo
                         </button>
 
-                        <button className="border border-gray-500 px-7 py-3 rounded-xl hover:bg-gray-100 transition duration-300 w-full sm:w-auto">
+                        <button
+                            className="border border-gray-500 px-7 py-3 rounded-xl hover:bg-gray-100 transition duration-300 w-full sm:w-auto">
                             Explore Features →
                         </button>
                     </div>
                 </div>
 
                 {/* Right Image */}
-                <div className="flex-1 w-full flex justify-center">
+                <div
+                    className="flex-1 w-full flex justify-center">
                     <img
                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTL9dK4kvKfmS3HYyM3VvT7YVswL5_uVbbpGQ&s"
                         alt="Billing Software"

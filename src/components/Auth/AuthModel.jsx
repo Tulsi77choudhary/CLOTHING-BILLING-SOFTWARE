@@ -5,39 +5,31 @@ import {
   useTheme,
   useMediaQuery,
   IconButton,
+  Divider,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useLocation, useNavigate } from "react-router-dom";
-import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
+import LoginForm from "./LoginForm";
+import { useLocation } from "react-router-dom";
 
 const AuthModel = ({ open, handleClose }) => {
   const location = useLocation();
-  const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
-  // Check current view
-  const isLoginView = location.pathname === "/login";
 
   const style = {
     position: "absolute",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: isMobile ? "95%" : 450,
-    maxHeight: "95vh",
+    width: isMobile ? "92%" : 500,
+    maxHeight: "90vh",
     overflowY: "auto",
-    // Dark Theme Colors
-    bgcolor: "#1e293b", 
-    border: "1px solid rgba(255,255,255,0.1)",
-    boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
-    borderRadius: "16px",
+    bgcolor: "background.paper",
+    boxShadow: 24,
+    borderRadius: 2,
     outline: "none",
-    p: isMobile ? 3 : 5,
-    color: "white",
-    scrollbarWidth: "none", // Hide scrollbar for Firefox
-    "&::-webkit-scrollbar": { display: "none" }, // Hide scrollbar for Chrome
+    p: isMobile ? 2 : 4,
   };
 
   return (
@@ -46,24 +38,22 @@ const AuthModel = ({ open, handleClose }) => {
       onClose={handleClose}
       closeAfterTransition
       aria-labelledby="auth-modal-title"
-      sx={{ backdropFilter: "blur(4px)" }}
     >
       <Box sx={style}>
-        {/* Close Button Only */}
-        <Box position="absolute" top={12} right={12}>
-          <IconButton onClick={handleClose} sx={{ color: "gray" }}>
+        {/* Header */}
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <h2 className="text-center ml-4 font-bold text-xl">
+            {location.pathname === "/login" ? "Login" : "Register"}
+          </h2>
+          <IconButton onClick={handleClose}>
             <CloseIcon />
           </IconButton>
         </Box>
 
-        {/* Dynamic Form Rendering */}
-        <Box mt={1}>
-          {isLoginView ? (
-            <LoginForm onSwitch={() => navigate("/register")} />
-          ) : (
-            <RegisterForm onSwitch={() => navigate("/login")} />
-          )}
-        </Box>
+        <Divider sx={{ my: 2 }} />
+
+        {/* Body */}
+        {location.pathname === "/login" ? <LoginForm /> : <RegisterForm />}
       </Box>
     </Modal>
   );

@@ -4,8 +4,10 @@ import {
   DisclosureButton,
   DisclosurePanel,
 } from "@headlessui/react";
+
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-scroll";
+import { useNavigate } from "react-router-dom";
 
 const NavItems = [
   { name: "Home", to: "home" },
@@ -15,7 +17,12 @@ const NavItems = [
   { name: "Contact", to: "contact" },
 ];
 
+
+
 export const Navbar = () => {
+
+  const navigate = useNavigate();
+
   return (
     <Disclosure
       as="nav"
@@ -24,7 +31,7 @@ export const Navbar = () => {
       {({ open }) => (
         <>
           <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            
+
             {/* Logo */}
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold">
@@ -41,7 +48,7 @@ export const Navbar = () => {
               <ul className="flex items-center gap-10">
                 {NavItems.map((item, index) => (
                   <li key={index} className="relative group pb-1">
-                    
+
                     <Link
                       to={item.to}
                       smooth={true}
@@ -61,10 +68,17 @@ export const Navbar = () => {
             </div>
 
             {/* Button */}
-            <div className="hidden md:block">
-              <button 
-              className="bg-purple-600 text-white px-5 py-2 rounded-lg hover:bg-purple-500 transition duration-200"
-              onClick={() => navigate("/login")}>
+            <div className="hidden md:flex items-center gap-4">
+              <button
+                className="bg-purple-600 text-white px-5 py-2 rounded-lg hover:bg-purple-500 transition duration-200"
+                onClick={() => navigate("/register")}
+              >
+                Register
+              </button>
+              <button
+                className="border border-purple-600 text-purple-600 px-5 py-2 rounded-lg hover:bg-purple-50 transition duration-200"
+                onClick={() => navigate("/login")}
+              >
                 Login
               </button>
             </div>
@@ -82,7 +96,7 @@ export const Navbar = () => {
           {/* Mobile Menu */}
           <DisclosurePanel className="md:hidden bg-purple-200 border-t border-gray-200">
             <div className="space-y-4 px-6 py-5">
-              
+
               {NavItems.map((item, index) => (
                 <Link
                   key={index}
@@ -96,7 +110,10 @@ export const Navbar = () => {
                 </Link>
               ))}
 
-              <button className="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition duration-300">
+              <button 
+              onClick={() => navigate("/register")}
+              className="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition duration-300">
+                
                 Register Now
               </button>
             </div>

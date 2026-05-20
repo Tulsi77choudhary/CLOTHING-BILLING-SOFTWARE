@@ -19,11 +19,9 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import UserStaff from "./components/UserStaff";
 import AddStock from "./components/Inventory/AddStock";
-
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useNavigate, useLocation, Routes, Route } from "react-router-dom";
-
 import AdminDashboard from "./components/AdminDashboard/AdminDashboard";
 import Billing from "./components/Billing/Billing";
 import Products from "./components/Products/Products";
@@ -44,14 +42,16 @@ import AddProduct from "./components/Sales/AddProduct";
 import AddPurchases from "./components/Purchase/AddPurchases";
 import AddOffer from "./components/Offer/AddOffer";
 
+
+
 const menu = [
   { name: "Dashboard", path: "/admin", Icon: <HomeIcon /> },
-  { name: "POS/Billing", path: "/admin/billing", Icon: <AddCardIcon /> },
+  // { name: "POS/Billing", path: "/admin/billing", Icon: <AddCardIcon /> },
   { name: "Products", path: "/admin/products", Icon: <CategoryIcon /> },
   { name: "Customers", path: "/admin/customers", Icon: <SupportAgentIcon /> },
   { name: "Sales", path: "/admin/sales", Icon: <RealEstateAgentIcon /> },
-  { name: "Purchases", path: "/admin/purchases", Icon: <ShoppingCartIcon /> },
-  { name: "Inventory", path: "/admin/inventory", Icon: <InventoryIcon /> },
+  // { name: "Purchases", path: "/admin/purchases", Icon: <ShoppingCartIcon /> },
+  //{ name: "Inventory", path: "/admin/inventory", Icon: <InventoryIcon /> },
   { name: "Reports", path: "/admin/reports", Icon: <ReportIcon /> },
   { name: "Offers & Discounts", path: "/admin/offers", Icon: <LocalOfferIcon /> },
   { name: "Expenses", path: "/admin/expenses", Icon: <HomeIcon /> },
@@ -122,7 +122,10 @@ function Admin() {
 
       <List sx={{ borderTop: "1px solid #f3f4f6", mb: 2 }}>
         <ListItem disablePadding>
-          <ListItemButton sx={{ mx: 1, borderRadius: "8px" }}>
+          <ListItemButton
+            onClick={() => handleMenuClick("/admin/profile")} // ✅ Fixed: handleMenuClick use karein taaki mobile drawer automatic close ho sake
+            selected={location.pathname === "/admin/profile"}
+            sx={{ mx: 1, borderRadius: "8px" }}>
             <ListItemIcon sx={{ minWidth: 45 }}><AccountCircleIcon /></ListItemIcon>
             <ListItemText primary="Admin Profile" />
           </ListItemButton>
@@ -164,7 +167,7 @@ function Admin() {
           variant="temporary"
           open={mobileOpen}
           onClose={handleDrawerToggle}
-          ModalProps={{ keepMounted: true }} // Better open performance on mobile
+          ModalProps={{ keepMounted: true }}
           sx={{
             display: { xs: "block", lg: "none" },
             "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
@@ -200,27 +203,27 @@ function Admin() {
       >
         <Routes>
           <Route path="/" element={<AdminDashboard />} />
-          <Route path="billing" element={<Billing />} />
+          {/* <Route path="billing" element={<Billing />} /> */}
 
           <Route path="products" element={<Products />} />
           <Route path="products/add" element={<AddProducts />} />
 
           <Route path="customers" element={<Customers />} />
-          <Route path="customers/add" element={<AddCustomers/>}></Route>
+          <Route path="customers/add" element={<AddCustomers />}></Route>
 
           <Route path="sales" element={<Sales />} />
-          <Route path="product/add" element={<AddProduct/>}/>
+          <Route path="product/add" element={<AddProduct />} />
 
           <Route path="purchases" element={<Purchases />} />
-          <Route path="purchases/add" element={<AddPurchases/>}></Route>
+          <Route path="purchases/add" element={<AddPurchases />}></Route>
 
-          <Route path="inventory" element={<Inventory />} />
-          <Route path="inventory/add" element={<AddStock/>}></Route>
+          {/* <Route path="inventory" element={<Inventory />} />
+          <Route path="inventory/add" element={<AddStock/>}></Route> */}
 
           <Route path="reports" element={< Reports />} />
 
           <Route path="offers" element={<Offers />} />
-          <Route path="offers/add" element={<AddOffer/>}/>
+          <Route path="offers/add" element={<AddOffer />} />
 
           <Route path="expenses" element={<Expenses />} />
           <Route path="users" element={<UserStaff />} />

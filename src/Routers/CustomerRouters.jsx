@@ -6,7 +6,6 @@ import Footer from '../components/Footer/Footer'
 import Register from '../components/Auth/RegisterForm'
 import Login from '../components/Auth/LoginForm'
 import { AddressBookIcon } from '@phosphor-icons/react'
-
 import Navigation from '../components/Navigation/Navigation'
 
 

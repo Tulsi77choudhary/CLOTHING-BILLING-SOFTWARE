@@ -34,11 +34,11 @@ const Profile = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Profile changes saved:', profile);
-    // Add API context submission updates here
+   
   };
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen flex justify-center items-start">
+    <div className=" bg-gray-50  flex justify-center items-start">
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 w-full max-w-4xl">
         
         {/* Title */}
@@ -164,7 +164,7 @@ const Profile = () => {
           <hr className="border-gray-100" />
 
           {/* Password Updates */}
-          <div className="grid grid-cols-4 items-start gap-4">
+          {/* <div className="grid grid-cols-4 items-start gap-4">
             <div>
               <label className="text-sm font-medium text-gray-600 block">
                 Change Password
@@ -199,7 +199,7 @@ const Profile = () => {
                 />
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* Submit Row */}
           <div className="flex justify-end pt-4 border-t border-gray-100">
