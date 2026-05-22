@@ -1,13 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaEnvelope, FaLock, FaStore, FaChevronRight, FaGoogle, FaTimes } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
+import {login} from "../../State/Auth/Auth"
 
 const Login = () => {
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [rememberMe, setRememberMe] = useState(false);
-  const handleClose = () => {
-    navigate('/'); 
-  };
+
+  const auth = useSelector((store) => store.auth);
+
+  useEffect(() =>{
+    if(auth.user){
+      navigate("/");
+    }
+  }, [auth.user, navigate]);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+
+    const userData = {
+      email: data.get("email"),
+      password: data.get("password")
+    };
+    
+    dispatch(login(userData));
+  }
 
   return (
     <div className="min-h-screen bg-[#1e293b] flex items-center justify-center p-4 font-sans mt-8">
@@ -17,7 +38,6 @@ const Login = () => {
         {/* --- Close Button --- */}
         <button
           type="button"
-          onClick={handleClose}
           className="absolute top-4 right-4 text-gray-500 hover:text-red-400 transition-colors p-2 rounded-lg hover:bg-gray-800/50"
           aria-label="Close login window"
         >
@@ -34,7 +54,7 @@ const Login = () => {
         </div>
 
         {/* --- Form Section --- */}
-        <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+        <form className="space-y-6" onSubmit={handleSubmit}>
 
           {/* Email Input */}
           <div className="space-y-2">
@@ -43,6 +63,7 @@ const Login = () => {
             </label>
             <input
               type="email"
+              name="email"
               placeholder="Enter your email"
               className="w-full bg-[#1e293b] border border-gray-500 rounded-xl px-4 py-3 text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#22c55e] focus:border-transparent transition-all placeholder:text-gray-500"
             />
@@ -63,6 +84,7 @@ const Login = () => {
             </div>
             <input
               type="password"
+              name="password"
               placeholder="••••••••"
               className="w-full bg-[#1e293b] border border-gray-500 rounded-xl px-4 py-3 text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#22c55e] focus:border-transparent transition-all placeholder:text-gray-500"
             />

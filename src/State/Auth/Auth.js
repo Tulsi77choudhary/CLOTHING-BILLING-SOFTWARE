@@ -10,11 +10,11 @@ import {
 export const register = (userData) => async (dispatch) => {
   dispatch({ type: REGISTER_REQUEST });
   try {
-    const response = await axios.post(`${API_BASE_URL}/auth/signup`, userData);
+    const response = await axios.post(`${API_BASE_URL}/api/auth/register`, userData);
     const user = response.data;
 
     if (user.jwt) {
-      localStorage.setItem("jwt", user.jwt);
+      localStorage.setItem("jwt");
     }
 
     dispatch({ type: REGISTER_SUCCESS, payload: user });
@@ -27,8 +27,8 @@ export const register = (userData) => async (dispatch) => {
 export const login = (userData) => async (dispatch) => {
   dispatch({ type: LOGIN_REQUEST });
   try {
-    const response = await axios.post(`${API_BASE_URL}/auth/login`, userData);
-    const { token, user } = response.data;
+    const response = await axios.post(`${API_BASE_URL}/api/auth/login`, userData);
+    const { jwt, user } = response.data;
     console.log("user",token,user);
     
 
@@ -39,7 +39,7 @@ export const login = (userData) => async (dispatch) => {
 
     dispatch({
       type: LOGIN_SUCCESS,
-      payload: { email: user.email, token, user, id: user.Name},
+      payload: { email: user.email, token, user, id: user.id},
     });
 
     console.log("Logged in user:", user);

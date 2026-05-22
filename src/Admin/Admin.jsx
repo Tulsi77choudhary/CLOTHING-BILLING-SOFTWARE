@@ -1,5 +1,5 @@
 import { useState } from "react";
-import MenuIcon from "@mui/icons-material/Menu";
+
 import {
   Box, ListItemText, ListItemButton, ListItem, List, ListItemIcon,
   Toolbar, CssBaseline, Drawer, AppBar, IconButton, Typography
@@ -123,7 +123,7 @@ function Admin() {
       <List sx={{ borderTop: "1px solid #f3f4f6", mb: 2 }}>
         <ListItem disablePadding>
           <ListItemButton
-            onClick={() => handleMenuClick("/admin/profile")} // ✅ Fixed: handleMenuClick use karein taaki mobile drawer automatic close ho sake
+            onClick={() => handleMenuClick("/admin/profile")} 
             selected={location.pathname === "/admin/profile"}
             sx={{ mx: 1, borderRadius: "8px" }}>
             <ListItemIcon sx={{ minWidth: 45 }}><AccountCircleIcon /></ListItemIcon>
