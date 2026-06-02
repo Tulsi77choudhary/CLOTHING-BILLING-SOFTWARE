@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-
+import React, { useEffect, useState } from 'react';
+import CloseIcon from "@mui/icons-material/Close";
 import { Link } from "react-router-dom";
 
 import {
@@ -27,7 +27,9 @@ import {
   Pagination,
   PaginationItem
 } from "@mui/material";
-
+import DialogContent from "@mui/material/DialogContent";
+import UpdateProductForm from "./updateProductForm";
+import Dialog from "@mui/material/Dialog";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
@@ -47,9 +49,11 @@ import MenuIcon from "@mui/icons-material/Menu";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import AddIcon from "@mui/icons-material/Add";
 
-import { Products, getTotalProductCount } from "../../../State/Product/Action";
+import { Products, getTotalProductCount, filterProducts } from "../../../State/Product/Action";
 import { useSelector, useDispatch } from "react-redux";
+import { useSearchParams, useNavigate } from "react-router-dom";
 
+import AddProducts from './AddProducts';
 
 const statsData = [
   { label: "Total Products", value: "256", sub: "All Products", icon: <InventoryIcon />, color: "#7C3AED", bg: "#F5F3FF" },
@@ -59,27 +63,76 @@ const statsData = [
 ];
 
 const Product = () => {
+
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const auth = useSelector(store => store.auth);
-  const { products, totalCount, loading, error } = useSelector((store) => store.product);
+  const { products, totalCount, filter, loading, error } = useSelector((store) => store.product);
 
   console.log("products list-----", products);
   console.log("total product count++++", totalCount);
+  console.log("=== ", filter);
+
+  const handleFilter = () => {
+    navigate(
+      `/admin/products?category=${category}&brand=${brand}&status=${status}`
+    );
+  };
+
+  const [searchParams] = useSearchParams();
+  const [openUpdateModal, setOpenUpdateModal] = useState(false);
+  const [selectedProductData, setSelectedProductData] = useState(null);
+
+  const [category, setCategory] = useState("All");
+  const [brand, setBrand] = useState("All");
+  const [status, setStatus] = useState("All");
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const [openImport, setOpenImport] = useState(false);
+  const handleOpenImport = () => setOpenImport(true);
+  const handleCloseImport = () => setOpenImport(false);
+
+  const [openExport, setOpenExport] = useState(false);
+  const handleOpenExport = () => setOpenExport(true);
+  const handleCloseExport = () => setOpenExport(false);
+
+  useEffect(() => {
+    const category = searchParams.get("category");
+    const brand = searchParams.get("brand");
+    const status = searchParams.get("status");
+
+    if (category || brand || status) {
+      dispatch(filterProducts(category, brand, status));
+    }
+  }, [searchParams, dispatch]);
 
   useEffect(() => {
     dispatch(Products());
     dispatch(getTotalProductCount())
   }, [dispatch]);
-  
+
+  const handleOpenUpdate = (product) => {
+    setSelectedProductData(product); // Row ka data save kiya
+    setOpenUpdateModal(true);        // Modal open kiya
+  };
+
   const activeProductsCount = products ? products.filter(p => p.status === "Active" || p.stock > 0).length : 0;
 
   const statsData = [
     { label: "Total Products", value: totalCount, sub: "All Products", icon: <InventoryIcon />, color: "#7C3AED", bg: "#F5F3FF" },
-    { label: "Low Stock",  sub: "Reorder Soon", icon: <WarningIcon />, color: "#EA580C", bg: "#FFF7ED" },
+    { label: "Low Stock", sub: "Reorder Soon", icon: <WarningIcon />, color: "#EA580C", bg: "#FFF7ED" },
     { label: "Out of Stock", sub: "Not Available", icon: <BlockIcon />, color: "#DC2626", bg: "#FEF2F2" },
     { label: "Active Products", value: activeProductsCount, sub: "Available", icon: <CheckCircleIcon />, color: "#16A34A", bg: "#F0FDF4" },
   ];
+
+  const handleCloseUpdate = () => {
+    setOpenUpdateModal(false);
+    setSelectedProductData(null);
+  };
 
   return (
     <Box sx={{ width: "100%", bgcolor: "#F8F9FC", minHeight: "100vh" }}>
@@ -97,7 +150,7 @@ const Product = () => {
       >
         {/* Left Side: Title & Subtitle */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          
+
           <Box>
             <Typography variant="h6" sx={{ fontWeight: 800, lineHeight: 1.2 }}>
               Products
@@ -142,13 +195,13 @@ const Product = () => {
           <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, cursor: "pointer" }}>
             <Avatar
               className="shadow-md border-2 border-indigo-100"
-                sx={{
-                  bgcolor: "#9155fd",
-                  width: 36,
-                  height: 36,
-                  fontSize: '0.9rem',
-                  fontWeight: 'bold'
-                }}
+              sx={{
+                bgcolor: "#9155fd",
+                width: 36,
+                height: 36,
+                fontSize: '0.9rem',
+                fontWeight: 'bold'
+              }}
             >
               {auth?.user?.fullName?.charAt(0).toUpperCase() || 'U'}
             </Avatar>
@@ -167,51 +220,50 @@ const Product = () => {
         <Grid container spacing={2} alignItems="center">
           {/* Stats Cards */}
           {statsData.map((item, index) => (
-          <Grid item key={index} xs={12} sm={6} md={3}> {/* md={3} रखने से 4 कार्ड्स पूरी स्क्रीन पर बराबर फिट होंगे */}
-            <Paper
-              elevation={0}
-              sx={{
-                p: 2,
-                borderRadius: "16px",
-                border: "1px solid #E5E7EB",
-                display: "flex",
-                alignItems: "center",
-                gap: 2,
-              }}
-            >
-              <Avatar
+            <Grid item key={index} xs={12} sm={6} md={3}>
+              <Paper
+                elevation={0}
                 sx={{
-                  bgcolor: item.bg,
-                  color: item.color,
-                  width: 48,
-                  height: 48,
-                  borderRadius: "12px",
+                  p: 2,
+                  borderRadius: "16px",
+                  border: "1px solid #E5E7EB",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 2,
                 }}
               >
-                {item.icon}
-              </Avatar>
-              <Box>
-                <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600 }}>
-                  {item.label}
-                </Typography>
-                <Typography variant="h6" sx={{ fontWeight: 800, lineHeight: 1, my: 0.5 }}>
-                  {item.value}
-                </Typography>
-                <Typography variant="caption" sx={{ color: "#9CA3AF", fontSize: "0.7rem" }}>
-                  {item.sub}
-                </Typography>
-              </Box>
-            </Paper>
-          </Grid>
-        ))}
+                <Avatar
+                  sx={{
+                    bgcolor: item.bg,
+                    color: item.color,
+                    width: 48,
+                    height: 48,
+                    borderRadius: "12px",
+                  }}
+                >
+                  {item.icon}
+                </Avatar>
+                <Box>
+                  <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600 }}>
+                    {item.label}
+                  </Typography>
+                  <Typography variant="h6" sx={{ fontWeight: 800, lineHeight: 1, my: 0.5 }}>
+                    {item.value}
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: "#9CA3AF", fontSize: "0.7rem" }}>
+                    {item.sub}
+                  </Typography>
+                </Box>
+              </Paper>
+            </Grid>
+          ))}
 
           {/* Add Product Button */}
           <Grid item xs={12} md={1.6} sx={{ textAlign: { xs: 'left', md: 'right' } }}>
             <Button
               variant="contained"
               startIcon={<AddIcon />}
-              component={Link}
-              to="/admin/products/add"
+              onClick={handleOpen}
               sx={{
                 bgcolor: "#4F46E5",
                 borderRadius: "12px",
@@ -227,6 +279,21 @@ const Product = () => {
             >
               Add New Product
             </Button>
+
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              maxWidth="md"
+              fullWidth
+              PaperProps={{
+                sx: { borderRadius: "16px" }
+              }}
+            >
+              <DialogContent sx={{ p: 0 }}>
+                {/* AddProducts component ko open aur handleClose pass kiya */}
+                <AddProducts onClose={handleClose} />
+              </DialogContent>
+            </Dialog>
           </Grid>
         </Grid>
       </Box>
@@ -277,6 +344,8 @@ const Product = () => {
             fullWidth
             size="small"
             defaultValue="All"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
             sx={{ borderRadius: "10px", fontSize: "0.85rem" }}
           >
             <MenuItem value="All">All Categories</MenuItem>
@@ -293,12 +362,13 @@ const Product = () => {
           <Select
             fullWidth
             size="small"
-            defaultValue="All"
+            value={brand}
+            onChange={(e) => setBrand(e.target.value)}
             sx={{ borderRadius: "10px", fontSize: "0.85rem" }}
           >
             <MenuItem value="All">All Brands</MenuItem>
             <MenuItem value="Nike">Nike</MenuItem>
-            <MenuItem value="Adidas">Adidas</MenuItem>
+            <MenuItem value="Puma">Puma</MenuItem>
           </Select>
         </Box>
 
@@ -310,7 +380,8 @@ const Product = () => {
           <Select
             fullWidth
             size="small"
-            defaultValue="All"
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
             sx={{ borderRadius: "10px", fontSize: "0.85rem" }}
           >
             <MenuItem value="All">All Status</MenuItem>
@@ -323,6 +394,7 @@ const Product = () => {
         <Button
           variant="contained"
           startIcon={<FilterAltOutlinedIcon />}
+          onClick={handleFilter}
           sx={{
             bgcolor: "#6236FF",
             borderRadius: "10px",
@@ -361,11 +433,206 @@ const Product = () => {
         <Box sx={{ p: 2, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <Typography variant="subtitle1" sx={{ fontWeight: 800 }}>Product List</Typography>
           <Stack direction="row" spacing={1}>
-            <IconButton size="small" sx={{ border: "1px solid #E5E7EB", borderRadius: "8px" }}><FileUploadOutlinedIcon fontSize="small" /> Import</IconButton>
-            <IconButton size="small" sx={{ border: "1px solid #E5E7EB", borderRadius: "8px" }}><FileDownloadOutlinedIcon fontSize="small" /> Export</IconButton>
+            <IconButton
+              size="small"
+              onClick={handleOpenImport}
+              sx={{ border: "1px solid #E5E7EB", borderRadius: "8px" }}
+            >
+              <FileUploadOutlinedIcon
+                fontSize="small" /> Import
+            </IconButton>
+            <IconButton
+              size="small"
+              onClick={handleOpenExport}
+              sx={{ border: "1px solid #E5E7EB", borderRadius: "8px" }}
+            >
+              <FileDownloadOutlinedIcon fontSize="small" />
+              Export
+            </IconButton>
             <IconButton size="small" sx={{ border: "1px solid #E5E7EB", borderRadius: "8px" }}><SettingsOutlinedIcon fontSize="small" /></IconButton>
           </Stack>
         </Box>
+
+        {/* === IMPORT POPUP DIALOG === */}
+        <Dialog
+          open={openImport}
+          onClose={handleCloseImport}
+          maxWidth="sm"
+          fullWidth
+          PaperProps={{
+            sx: { borderRadius: "16px", p: 2 }
+          }}
+        >
+          <DialogContent>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, py: 2 }}>
+
+              <IconButton
+                onClick={handleCloseImport}
+                sx={{ position: 'absolute', top: 12, right: 12, color: '#9CA3AF' }}
+              >
+                <CloseIcon />
+              </IconButton>
+
+              <Avatar sx={{ bgcolor: '#EEF2FF', color: '#4F46E5', width: 56, height: 56, mb: 1 }}>
+                <FileUploadOutlinedIcon sx={{ fontSize: 32 }} />
+              </Avatar>
+
+              <Typography variant="h6" sx={{ fontWeight: 800, color: '#1F2937' }}>
+                Import Products
+              </Typography>
+
+              <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 2 }}>
+                Select an Excel or CSV file to upload your product bulk data.
+              </Typography>
+
+              {/* File Upload Area */}
+              <Box
+                component="label"
+                sx={{
+                  width: '100%',
+                  border: '2px dashed #E5E7EB',
+                  borderRadius: '12px',
+                  p: 4,
+                  textAlign: 'center',
+                  cursor: 'pointer',
+                  '&:hover': { bgcolor: '#F9FAFB', borderColor: '#4F46E5' }
+                }}
+              >
+                <input type="file" accept=".csv, .xlsx" hidden onChange={(e) => console.log(e.target.files[0])} />
+                <Typography variant="body2" sx={{ fontWeight: 600, color: '#4F46E5' }}>
+                  Click to upload file
+                </Typography>
+                <Typography variant="caption" color="text.secondary" display="block" sx={{ mt: 0.5 }}>
+                  Supports CSV, XLSX up to 5MB
+                </Typography>
+              </Box>
+
+              {/* Action Buttons */}
+              <Stack direction="row" spacing={2} sx={{ width: '100%', mt: 3 }}>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  onClick={handleCloseImport}
+                  sx={{ borderRadius: '10px', textTransform: 'none', fontWeight: 600, borderColor: '#E5E7EB', color: '#374151' }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  sx={{ borderRadius: '10px', textTransform: 'none', fontWeight: 600, bgcolor: '#4F46E5', '&:hover': { bgcolor: '#4338CA' } }}
+                >
+                  Upload & Import
+                </Button>
+              </Stack>
+            </Box>
+          </DialogContent>
+        </Dialog>
+
+        {/* === EXPORT POPUP DIALOG === */}
+        <Dialog
+          open={openExport}
+          onClose={handleCloseExport}
+          maxWidth="sm"
+          fullWidth
+          PaperProps={{
+            sx: { borderRadius: "16px", p: 2 }
+          }}
+        >
+          <DialogContent>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, py: 2 }}>
+              {/* क्लोज बटन */}
+              <IconButton
+                onClick={handleCloseExport}
+                sx={{ position: 'absolute', top: 12, right: 12, color: '#9CA3AF' }}
+              >
+                {/* पिछले स्टेप में जो इम्पोर्ट किया था वही इस्तेमाल कर रहे हैं */}
+                <CloseIcon />
+              </IconButton>
+
+              <Avatar sx={{ bgcolor: '#ECFDF5', color: '#10B981', width: 56, height: 56, mb: 1 }}>
+                <FileDownloadOutlinedIcon sx={{ fontSize: 32 }} />
+              </Avatar>
+
+              <Typography variant="h6" sx={{ fontWeight: 800, color: '#1F2937' }}>
+                Export Products
+              </Typography>
+
+              <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 2 }}>
+                Choose your preferred format to download the complete product catalogue.
+              </Typography>
+
+              {/* Format Selection Cards */}
+              <Stack direction="row" spacing={2} sx={{ width: '100%', mb: 1 }}>
+                {/* Excel Format Card */}
+                <Box
+                  onClick={() => console.log('Excel format selected')}
+                  sx={{
+                    flex: 1,
+                    border: '2px solid #10B981', // Default selected
+                    borderRadius: '12px',
+                    p: 3,
+                    textAlign: 'center',
+                    cursor: 'pointer',
+                    bgcolor: '#F0FDF4',
+                    '&:hover': { bgcolor: '#DCFCE7' }
+                  }}
+                >
+                  <Typography variant="subtitle1" sx={{ fontWeight: 700, color: '#14532D' }}>
+                    Excel Sheet
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    Best for data review (.xlsx)
+                  </Typography>
+                </Box>
+
+                {/* CSV Format Card */}
+                <Box
+                  onClick={() => console.log('CSV format selected')}
+                  sx={{
+                    flex: 1,
+                    border: '2px solid #E5E7EB',
+                    borderRadius: '12px',
+                    p: 3,
+                    textAlign: 'center',
+                    cursor: 'pointer',
+                    '&:hover': { bgcolor: '#F9FAFB', borderColor: '#9CA3AF' }
+                  }}
+                >
+                  <Typography variant="subtitle1" sx={{ fontWeight: 700, color: '#374151' }}>
+                    CSV File
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    Best for integration (.csv)
+                  </Typography>
+                </Box>
+              </Stack>
+
+              {/* Action Buttons */}
+              <Stack direction="row" spacing={2} sx={{ width: '100%', mt: 3 }}>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  onClick={handleCloseExport}
+                  sx={{ borderRadius: '10px', textTransform: 'none', fontWeight: 600, borderColor: '#E5E7EB', color: '#374151' }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  onClick={() => {
+                    console.log("Downloading logic here...");
+                    handleCloseExport();
+                  }}
+                  sx={{ borderRadius: '10px', textTransform: 'none', fontWeight: 600, bgcolor: '#10B981', '&:hover': { bgcolor: '#059669' } }}
+                >
+                  Download Data
+                </Button>
+              </Stack>
+            </Box>
+          </DialogContent>
+        </Dialog>
 
         <TableContainer>
           <Table sx={{ minWidth: 1000 }}>
@@ -379,16 +646,16 @@ const Product = () => {
                 <TableCell sx={{ fontWeight: 700, color: "#6B7280" }}>Brand</TableCell>
                 <TableCell sx={{ fontWeight: 700, color: "#6B7280" }}>Size</TableCell>
                 <TableCell sx={{ fontWeight: 700, color: "#6B7280" }}>Color</TableCell>
-                <TableCell sx={{ fontWeight: 700, color: "#6B7280" }}>Price (₹)</TableCell>
+                <TableCell sx={{ fontWeight: 700, color: "#6B7280" }}>Price(₹)</TableCell>
                 <TableCell sx={{ fontWeight: 700, color: "#6B7280" }}>Stock</TableCell>
                 <TableCell sx={{ fontWeight: 700, color: "#6B7280" }}>Status</TableCell>
                 <TableCell sx={{ fontWeight: 700, color: "#6B7280" }}>Action</TableCell>
               </TableRow>
             </TableHead>
+
             <TableBody>
               {products?.map((row) => (
                 <TableRow key={row.id} hover>
-
                   <TableCell padding="checkbox">
                     <Checkbox size="small" />
                   </TableCell>
@@ -396,12 +663,8 @@ const Product = () => {
                   <TableCell>
                     <Avatar
                       variant="rounded"
-                      src={row.imageUrl} // backend image
-                      sx={{
-                        width: 40,
-                        height: 40,
-                        bgcolor: "#F3F4F6",
-                      }}
+                      src={row.imageUrl}
+                      sx={{ width: 40, height: 40, bgcolor: "#F3F4F6" }}
                     />
                   </TableCell>
 
@@ -409,35 +672,23 @@ const Product = () => {
                     <Typography sx={{ fontWeight: 600, fontSize: "0.85rem" }}>
                       {row.name}
                     </Typography>
-
                     <Typography variant="caption" color="text.secondary">
                       {row.barcode}
                     </Typography>
                   </TableCell>
 
-                  <TableCell sx={{ fontSize: "0.85rem" }}>
-                    {row.sku}
-                  </TableCell>
+                  <TableCell sx={{ fontSize: "0.85rem" }}>{row.sku}</TableCell>
 
                   <TableCell>
                     <Chip
                       label={row.category}
                       size="small"
-                      sx={{
-                        bgcolor: "#F5F3FF",
-                        color: "#7C3AED",
-                        fontWeight: 600,
-                      }}
+                      sx={{ bgcolor: "#F5F3FF", color: "#7C3AED", fontWeight: 600 }}
                     />
                   </TableCell>
 
-                  <TableCell sx={{ fontSize: "0.85rem" }}>
-                    {row.brand}
-                  </TableCell>
-
-                  <TableCell sx={{ fontSize: "0.85rem" }}>
-                    {row.size}
-                  </TableCell>
+                  <TableCell sx={{ fontSize: "0.85rem" }}>{row.brand}</TableCell>
+                  <TableCell sx={{ fontSize: "0.85rem" }}>{row.size}</TableCell>
 
                   <TableCell>
                     <Stack direction="row" spacing={0.5}>
@@ -456,9 +707,7 @@ const Product = () => {
                     </Stack>
                   </TableCell>
 
-                  <TableCell sx={{ fontWeight: 700 }}>
-                    ₹{row.price}
-                  </TableCell>
+                  <TableCell sx={{ fontWeight: 700 }}>₹{row.price}</TableCell>
 
                   <TableCell
                     sx={{
@@ -478,9 +727,15 @@ const Product = () => {
                     />
                   </TableCell>
 
+                  {/* ACTION BUTTONS */}
                   <TableCell>
-                    <Stack direction="row">
-                      <IconButton size="small" color="primary">
+                    <Stack direction="row" spacing={1}>
+                      {/* Edit Button (Ab chalega aur click par current row ka data pass karega) */}
+                      <IconButton
+                        size="small"
+                        color="primary"
+                        onClick={() => handleOpenUpdate(row)}
+                      >
                         <EditOutlinedIcon fontSize="small" />
                       </IconButton>
 
@@ -489,12 +744,27 @@ const Product = () => {
                       </IconButton>
                     </Stack>
                   </TableCell>
-
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
+
+        {/* GLOBAL DIALOG MODAL (Loop se bahaar ek hi baar render hoga) */}
+        <Dialog
+          open={openUpdateModal}
+          onClose={handleCloseUpdate}
+          fullWidth
+          maxWidth="md"
+          aria-labelledby="update-product-dialog"
+        >
+          <DialogContent className="bg-gray-50 p-2 md:p-6">
+            <UpdateProductForm
+              selectedProduct={selectedProductData}
+              handleClose={handleCloseUpdate}
+            />
+          </DialogContent>
+        </Dialog>
       </Paper>
 
       <Box
