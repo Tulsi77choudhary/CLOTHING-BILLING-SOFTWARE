@@ -31,7 +31,7 @@ import Purchases from "./components/Purchase/Purchases";
 import Inventory from "./components/Inventory/Inventory";
 import Reports from "./components/Reports";
 import Offers from "./components/Offer/Offers";
-import Expenses from "./components/Expenses";
+import Expenses from "./components/Expenses/Expenses";
 import { Icon, User } from "lucide-react";
 import Settings from "./components/Setting";
 import Profile from "./components/Profile";
@@ -46,10 +46,10 @@ import MenuIcon from "@mui/icons-material/Menu";
 
 const menu = [
   { name: "Dashboard", path: "/admin", Icon: <HomeIcon /> },
-  // { name: "POS/Billing", path: "/admin/billing", Icon: <AddCardIcon /> },
+  { name: "POS/Billing", path: "/admin/billing", Icon: <AddCardIcon /> },
   { name: "Products", path: "/admin/products", Icon: <CategoryIcon /> },
   { name: "Customers", path: "/admin/customers", Icon: <SupportAgentIcon /> },
-  { name: "Sales", path: "/admin/sales", Icon: <RealEstateAgentIcon /> },
+  // { name: "Sales", path: "/admin/sales", Icon: <RealEstateAgentIcon /> },
   // { name: "Purchases", path: "/admin/purchases", Icon: <ShoppingCartIcon /> },
   //{ name: "Inventory", path: "/admin/inventory", Icon: <InventoryIcon /> },
   { name: "Reports", path: "/admin/reports", Icon: <ReportIcon /> },
@@ -203,15 +203,15 @@ function Admin() {
       >
         <Routes>
           <Route index element={<AdminDashboard />} />
-          {/* <Route path="billing" element={<Billing />} /> */}
+          <Route path="billing" element={<Billing />} />
 
           <Route path="products" element={<Products />} />
-          <Route path="products/add" element={<AddProducts />} />
+          {/* <Route path="products/add" element={<AddProducts />} /> */}
 
           <Route path="customers" element={<Customers />} />
           <Route path="customers/add" element={<AddCustomers />}></Route>
 
-          <Route path="sales" element={<Sales />} />
+          {/* <Route path="sales" element={<Sales />} /> */}
           <Route path="product/add" element={<AddProduct />} />
 
           <Route path="purchases" element={<Purchases />} />

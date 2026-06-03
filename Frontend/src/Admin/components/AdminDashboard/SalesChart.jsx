@@ -37,7 +37,9 @@ const SalesChart = () => {
       }}
     >
       {/* Header Section */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+      <Box
+        sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}
+      >
         <Typography variant="h5" sx={{ fontWeight: 700, fontSize: '1rem' }}>
           Sales Overview
         </Typography>
@@ -58,41 +60,60 @@ const SalesChart = () => {
 
       {/* Chart Section */}
       <Box sx={{ width: '100%', height: 300 }}>
-        <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+        <ResponsiveContainer
+          width="100%"
+          height="100%"
+        >
+          <AreaChart
+            data={data}
+            margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+          >
             <defs>
               {/* Purple Gradient for Area Background */}
-              <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#6236FF" stopOpacity={0.15} />
-                <stop offset="95%" stopColor="#6236FF" stopOpacity={0} />
+              <linearGradient
+                id="colorSales"
+                x1="0"
+                y1="0"
+                x2="0"
+                y2="1">
+                <stop
+                  offset="5%"
+                  stopColor="#6236FF"
+                  stopOpacity={0.15}
+                />
+                <stop
+                  offset="95%"
+                  stopColor="#6236FF"
+                  stopOpacity={0}
+                />
               </linearGradient>
             </defs>
-            
+
             <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#F3F4F6" />
-            
-            <XAxis 
-              dataKey="day" 
-              axisLine={false} 
-              tickLine={false} 
+
+            <XAxis
+              dataKey="day"
+              axisLine={false}
+              tickLine={false}
               tick={{ fontSize: 11, fill: '#6B7280' }}
               dy={10}
             />
-            
-            <YAxis 
-              axisLine={false} 
-              tickLine={false} 
+
+            <YAxis
+              axisLine={false}
+              tickLine={false}
               tick={{ fontSize: 11, fill: '#6B7280' }}
               tickFormatter={(value) => `${value / 1000}K`}
             />
-            
-            <Tooltip 
+
+            <Tooltip
               contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
             />
-            
+
             <Area
               type="monotone"
               dataKey="sales"
-              stroke="#6236FF" 
+              stroke="#6236FF"
               strokeWidth={3}
               fillOpacity={1}
               fill="url(#colorSales)"

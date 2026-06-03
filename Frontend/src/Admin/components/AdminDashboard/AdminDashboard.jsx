@@ -200,12 +200,34 @@ const DashboardPage = () => {
         {/* --- Stats Row (Horizontal Scroll on Mobile) --- */}
         <Grid container spacing={2} sx={{ mb: 3, flexWrap: isMobile ? 'nowrap' : 'wrap', overflowX: isMobile ? 'auto' : 'visible', pb: isMobile ? 2 : 0 }}>
           {stats.map((s, i) => (
-            <Grid item key={i} xs={10} sm={6} md={2.4} sx={{ flexShrink: 0 }}>
-              <Paper sx={{ p: 2, borderRadius: '16px', display: 'flex', alignItems: 'center', gap: 1.5, border: '1px solid #F3F4F6' }}>
-                <Avatar sx={{ bgcolor: s.color, width: 40, height: 40 }}>{s.icon}</Avatar>
+            <Grid
+              item key={i}
+              xs={10} sm={6}
+              md={2.4}
+              sx={{ flexShrink: 0 }}
+            >
+              <Paper
+                sx={{ p: 2, borderRadius: '16px', display: 'flex', alignItems: 'center', gap: 1.5, border: '1px solid #F3F4F6' }}
+              >
+                <Avatar
+                  sx={{ bgcolor: s.color, width: 40, height: 40 }}
+                >
+                  {s.icon}
+                </Avatar>
                 <Box>
-                  <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600 }}>{s.title}</Typography>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 800 }}>{s.value}</Typography>
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    sx={{ fontWeight: 600 }}
+                  >
+                    {s.title}
+                  </Typography>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ fontWeight: 800 }}
+                  >
+                    {s.value}
+                  </Typography>
                 </Box>
               </Paper>
             </Grid>
@@ -213,10 +235,16 @@ const DashboardPage = () => {
         </Grid>
 
 
-        <Grid container spacing={6} sx={{ mt: 1 }}>
+        <Grid
+          container spacing={6}
+          sx={{ mt: 1 }}
+        >
 
           {/* Sales Overview Chart (Left Side - occupies 8/12 columns on desktop) */}
-          <Grid item xs={12} md={8}>
+          <Grid
+            item xs={12}
+            md={8}
+          >
             <Box
               sx={{
                 boxShadow: '0px 10px 15px -3px rgba(156, 163, 175, 0.3)',
@@ -229,7 +257,10 @@ const DashboardPage = () => {
           </Grid>
 
           {/* Category Chart (Right Side - occupies 4/12 columns on desktop) */}
-          <Grid item xs={12} md={4}>
+          <Grid
+            item xs={12}
+            md={4}
+          >
             <Box
               sx={{
                 boxShadow: '0px 10px 15px -3px rgba(156, 163, 175, 0.3)', // Box shadow consistent rakhi hai
@@ -257,8 +288,11 @@ const DashboardPage = () => {
 
 
         {/* --- Footer --- */}
-        <Box sx={{ mt: 5, textAlign: isMobile ? 'center' : 'left', borderTop: '1px solid #EEE', pt: 2 }}>
-          <Typography variant="caption" color="text.secondary">© 2024 TSAR IT PVT LTD</Typography>
+        <Box
+          sx={{ mt: 5, textAlign: isMobile ? 'center' : 'left', borderTop: '1px solid #EEE', pt: 2 }}
+        >
+          <Typography
+            variant="caption" color="text.secondary">© 2024 TSAR IT PVT LTD</Typography>
         </Box>
       </div>
     </Box >

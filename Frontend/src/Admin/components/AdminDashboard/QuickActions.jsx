@@ -64,8 +64,8 @@ const QuickActions = () => {
                   width: 36,
                   height: 36,
                   borderRadius: '10px',
-                  bgcolor: action.color, // Pure solid color background as per image
-                  color: 'white', // Icon color white
+                  bgcolor: action.color, 
+                  color: 'white', 
                 }}
               >
                 {action.icon}

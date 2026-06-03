@@ -6,7 +6,7 @@ const AddCustomers = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    customerId: "CU" + Math.floor(1000 + Math.random() * 9000), 
+    customerId: "CU" + Math.floor(1000 + Math.random() * 9000),
     name: "",
     phone: "",
     email: "",
@@ -145,7 +145,10 @@ const AddCustomers = () => {
 
             {/* FIXED: Total Purchase */}
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1.5">Total Purchase (₹)</label>
+              <label
+                className="block text-xs font-semibold text-gray-600 mb-1.5"
+              >Total Purchase (₹)
+              </label>
               <input
                 type="number"
                 name="total"
@@ -188,7 +191,6 @@ const AddCustomers = () => {
             <Save size={16} /> Save Customer
           </button>
         </div>
-        
       </form>
     </div>
   );

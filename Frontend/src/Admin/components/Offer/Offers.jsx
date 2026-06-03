@@ -1,11 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Plus, Bell, User, Ticket, Tag, Percent, Gift } from 'lucide-react';
 import OfferTable from './OfferTable';
-import { useNavigate } from 'react-router-dom';
+import AddOffer from './AddOffer';
+
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import IconButton from '@mui/material/IconButton';
+
+import CloseIcon from '@mui/icons-material/Close';
 
 const Offers = () => {
+  const [openOfferModal, setOpenOfferModal] = useState(false);
 
-  const navigate = useNavigate();
+  const handleOpenOfferModal = () => {
+    setOpenOfferModal(true);
+  };
+
+  const handleCloseOfferModal = () => {
+    setOpenOfferModal(false);
+  };
+
   const metrics = [
     {
       label: 'Total Offers',
@@ -47,25 +61,39 @@ const Offers = () => {
 
   return (
     <div className="p-8 bg-slate-50/50 min-h-screen font-sans">
-      {/* Header with Breadcrumbs */}
+      {/* Header */}
       <div className="flex justify-between items-start mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Offers & Discounts</h1>
+          <h1 className="text-2xl font-bold text-slate-900">
+            Offers & Discounts
+          </h1>
+
           <nav className="flex text-xs text-slate-400 mt-1">
-            <span className="hover:text-slate-600 cursor-pointer">Home</span>
+            <span className="hover:text-slate-600 cursor-pointer">
+              Home
+            </span>
             <span className="mx-2">{'>'}</span>
-            <span className="text-slate-600">Offers & Discounts</span>
+            <span className="text-slate-600">
+              Offers & Discounts
+            </span>
           </nav>
         </div>
 
         <div className="flex items-center gap-4">
-
+          {/* Add Offer Button */}
           <button
-            onClick={() => navigate('/admin/offers/add')}
-            className="bg-indigo-700 text-white px-5 py-2 rounded-lg flex items-center gap-2 text-sm font-semibold hover:bg-indigo-800 transition-all shadow-sm">
-            <Plus size={18} /> Add Offer
+            onClick={() => setOpenOfferModal(true)}
+            className="bg-indigo-700 text-white px-5 py-2 rounded-lg"
+          >
+            Add Offer
           </button>
 
+          <AddOffer
+            open={openOfferModal}
+            handleClose={() => setOpenOfferModal(false)}
+          />
+
+          {/* Notification */}
           <div className="relative p-2 bg-white rounded-lg border border-slate-200 cursor-pointer">
             <Bell size={20} className="text-slate-500" />
             <span className="absolute top-1 right-1 bg-indigo-600 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center border-2 border-white">
@@ -73,39 +101,92 @@ const Offers = () => {
             </span>
           </div>
 
+          {/* User */}
           <div className="p-2 bg-white rounded-lg border border-slate-200 cursor-pointer">
             <User size={20} className="text-slate-500" />
           </div>
         </div>
       </div>
 
-      {/* Metrics Grid */}
+      {/* Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {metrics.map((metric, index) => (
-          <div key={index} className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+          <div
+            key={index}
+            className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow"
+          >
             <div className="flex items-center gap-4 mb-4">
               <div className={`${metric.iconBg} p-3 rounded-xl`}>
-                <metric.icon className={metric.iconColor} size={24} />
+                <metric.icon
+                  className={metric.iconColor}
+                  size={24}
+                />
               </div>
+
               <div>
                 <p className="text-xs font-bold text-slate-800 uppercase tracking-tight">
                   {metric.label}
                 </p>
+
                 <h3 className="text-xl font-extrabold text-slate-900 mt-1">
                   {metric.value}
                 </h3>
               </div>
             </div>
-            <div className={`text-[11px] font-bold ${metric.subColor} mt-2`}>
+
+            <div
+              className={`text-[11px] font-bold ${metric.subColor} mt-2`}
+            >
               {metric.subText}
             </div>
           </div>
         ))}
       </div>
-      <div className='mt-6'>
+
+      {/* Offer Table */}
+      <div className="mt-6">
         <OfferTable />
       </div>
 
+      {/* Add Offer Popup */}
+      <Dialog
+        open={openOfferModal}
+        onClose={handleCloseOfferModal}
+        maxWidth="lg"
+        fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: '16px',
+            overflow: 'hidden'
+          }
+        }}
+      >
+        <DialogContent
+          sx={{
+            p: 0,
+            position: 'relative'
+          }}
+        >
+          <IconButton
+            onClick={handleCloseOfferModal}
+            sx={{
+              position: 'absolute',
+              top: 10,
+              right: 10,
+              zIndex: 1000,
+              bgcolor: 'white',
+              boxShadow: 1,
+              '&:hover': {
+                bgcolor: '#f5f5f5'
+              }
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+
+          <AddOffer />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

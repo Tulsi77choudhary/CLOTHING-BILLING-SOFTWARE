@@ -5,7 +5,6 @@ import {
 import { FiberManualRecord as FiberManualRecordIcon } from '@mui/icons-material';
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from 'recharts';
 
-// Data prop component ke parameters mein pass kiya hai
 const CategoryChart = ({ data = [] }) => {
   return (
     <Paper

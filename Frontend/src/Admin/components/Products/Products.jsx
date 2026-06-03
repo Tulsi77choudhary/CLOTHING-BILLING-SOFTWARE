@@ -116,8 +116,8 @@ const Product = () => {
   }, [dispatch]);
 
   const handleOpenUpdate = (product) => {
-    setSelectedProductData(product); // Row ka data save kiya
-    setOpenUpdateModal(true);        // Modal open kiya
+    setSelectedProductData(product); 
+    setOpenUpdateModal(true);        
   };
 
   const activeProductsCount = products ? products.filter(p => p.status === "Active" || p.stock > 0).length : 0;
@@ -541,12 +541,11 @@ const Product = () => {
         >
           <DialogContent>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, py: 2 }}>
-              {/* क्लोज बटन */}
+              
               <IconButton
                 onClick={handleCloseExport}
                 sx={{ position: 'absolute', top: 12, right: 12, color: '#9CA3AF' }}
               >
-                {/* पिछले स्टेप में जो इम्पोर्ट किया था वही इस्तेमाल कर रहे हैं */}
                 <CloseIcon />
               </IconButton>
 
@@ -569,7 +568,7 @@ const Product = () => {
                   onClick={() => console.log('Excel format selected')}
                   sx={{
                     flex: 1,
-                    border: '2px solid #10B981', // Default selected
+                    border: '2px solid #10B981', 
                     borderRadius: '12px',
                     p: 3,
                     textAlign: 'center',
