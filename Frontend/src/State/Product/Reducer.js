@@ -1,4 +1,3 @@
-
 import * as types from './ActionType';
 
 export const initialState = {
@@ -7,7 +6,12 @@ export const initialState = {
     filter: {},
     loading: false,
     error: null,
-    currentProduct: null
+    currentProduct: null,
+
+    // Excel specific initial states
+    excelLoading: false,
+    excelSuccessMessage: null,
+    excelError: null
 };
 
 export const productReducer = (state = initialState, action) => {
@@ -19,13 +23,18 @@ export const productReducer = (state = initialState, action) => {
         case types.GET_TOTAL_PRODUCTS_REQUEST:
         case types.FILTER_PRODUCTS_REQUEST:
         case types.UPDATE_PRODUCT_REQUEST:
+        case types.IMPORT_PRODUCTS_REQUEST:
+        case types.EXPORT_PRODUCTS_REQUEST:
             return {
                 ...state,
                 loading: true,
-                error: null
+                error: null,
+                excelLoading: true,
+                excelSuccessMessage: null,
+                excelError: null
             };
 
-        
+
         case types.GET_PRODUCTS_SUCCESS:
             return {
                 ...state,
@@ -33,7 +42,7 @@ export const productReducer = (state = initialState, action) => {
                 products: action.payload
             };
 
-        
+
         case types.CREATE_PRODUCTS_SUCCESS:
             return {
                 ...state,
@@ -45,12 +54,13 @@ export const productReducer = (state = initialState, action) => {
                 ]
             };
 
-        case types.GET_TOTAL_PRODUCTS_SUCCESS: 
+        case types.GET_TOTAL_PRODUCTS_SUCCESS:
             return {
                 ...state,
                 loading: false,
                 totalCount: action.payload
             };
+            
         case types.FILTER_PRODUCTS_SUCCESS:
             return {
                 ...state,
@@ -59,6 +69,7 @@ export const productReducer = (state = initialState, action) => {
                 filter: action.filter || {},
                 error: null
             };
+            
         case types.UPDATE_PRODUCT_SUCCESS:
             return {
                 ...state,
@@ -68,7 +79,34 @@ export const productReducer = (state = initialState, action) => {
                 ),
                 error: null
             };
-        
+
+        case types.IMPORT_PRODUCTS_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                excelLoading: false,
+                excelSuccessMessage: action.payload, 
+                excelError: null
+            };
+
+        case types.EXPORT_PRODUCTS_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                excelLoading: false,
+                excelError: null
+            };
+
+        case types.IMPORT_PRODUCTS_FAILURE:
+        case types.EXPORT_PRODUCTS_FAILURE:
+            return {
+                ...state,
+                loading: false,
+                excelLoading: false,
+                excelError: action.payload,
+                excelSuccessMessage: null
+            };
+
         case types.GET_PRODUCTS_FAILURE:
         case types.CREATE_PRODUCTS_FAILURE:
         case types.GET_TOTAL_PRODUCTS_FAILURE:

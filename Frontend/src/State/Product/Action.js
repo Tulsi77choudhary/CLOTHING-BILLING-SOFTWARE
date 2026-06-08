@@ -110,3 +110,74 @@ export const updateProduct = (productId, productData) => async (dispatch) => {
         });
     }
 };
+
+export const importProductsFromExcel = (file) => async (dispatch) => {
+    dispatch({ type: IMPORT_PRODUCTS_REQUEST });
+
+    try {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const response = await axios.post(`${API_BASE_URL}/api/products/import`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+
+        dispatch({
+            type: IMPORT_PRODUCTS_SUCCESS,
+            payload: response.data.message
+        });
+        
+        console.log("Import Success:", response.data.message);
+        return { success: true, message: response.data.message };
+
+    } catch (error) {
+        const errorMessage = error.response?.data?.message || error.message || "Import failed!";
+        dispatch({
+            type: IMPORT_PRODUCTS_FAILURE,
+            payload: errorMessage
+        });
+        
+        console.error("Import Error:", errorMessage);
+        return { success: false, message: errorMessage };
+    }
+};
+
+export const exportProductsToExcel = () => async (dispatch) => {
+    dispatch({ type: EXPORT_PRODUCTS_REQUEST });
+
+    try {
+        // Binary/Stream data download karne ke liye responseType 'blob' zaroori hai
+        const response = await axios.get(`${API_BASE_URL}/api/products/export`, {
+            responseType: 'blob' 
+        });
+
+        // Blob data ko browser download link me convert karna
+        const blob = new Blob([response.data], { 
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" 
+        });
+        const downloadUrl = window.URL.createObjectURL(blob);
+        
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.setAttribute('download', 'products_catalogue.xlsx'); // File name setup
+        document.body.appendChild(link);
+        link.click();
+        
+        // Cleanup
+        link.parentNode.removeChild(link);
+        window.URL.revokeObjectURL(downloadUrl);
+
+        dispatch({ type: EXPORT_PRODUCTS_SUCCESS });
+        return { success: true };
+
+    } catch (error) {
+        dispatch({
+            type: EXPORT_PRODUCTS_FAILURE,
+            payload: error.message || "Export failed!"
+        });
+        console.error("Export Error:", error);
+        return { success: false, message: error.message };
+    }
+};
