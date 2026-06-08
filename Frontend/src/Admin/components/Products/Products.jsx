@@ -25,7 +25,8 @@ import {
   TableBody,
   Chip,
   Pagination,
-  PaginationItem
+  PaginationItem,
+  CircularProgress
 } from "@mui/material";
 import DialogContent from "@mui/material/DialogContent";
 import UpdateProductForm from "./updateProductForm";
@@ -49,7 +50,14 @@ import MenuIcon from "@mui/icons-material/Menu";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import AddIcon from "@mui/icons-material/Add";
 
-import { Products, getTotalProductCount, filterProducts } from "../../../State/Product/Action";
+import {
+  Products,
+  getTotalProductCount,
+  filterProducts,
+  importProductsFromExcel,
+  exportProductsToExcel
+} from "../../../State/Product/Action";
+
 import { useSelector, useDispatch } from "react-redux";
 import { useSearchParams, useNavigate } from "react-router-dom";
 
@@ -68,7 +76,7 @@ const Product = () => {
   const navigate = useNavigate();
 
   const auth = useSelector(store => store.auth);
-  const { products, totalCount, filter, loading, error } = useSelector((store) => store.product);
+  const { products, totalCount, filter, loading, error, excelLoading } = useSelector((store) => store.product);
 
   console.log("products list-----", products);
   console.log("total product count++++", totalCount);
@@ -87,15 +95,17 @@ const Product = () => {
   const [category, setCategory] = useState("All");
   const [brand, setBrand] = useState("All");
   const [status, setStatus] = useState("All");
-
   const [open, setOpen] = useState(false);
+  const [importFile, setImportFile] = useState(null);
+  const [page, setPage] = useState(1);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const [openImport, setOpenImport] = useState(false);
   const handleOpenImport = () => setOpenImport(true);
   const handleCloseImport = () => setOpenImport(false);
-
+const [selectedExportFormat, setSelectedExportFormat] = useState('xlsx'); 
   const [openExport, setOpenExport] = useState(false);
   const handleOpenExport = () => setOpenExport(true);
   const handleCloseExport = () => setOpenExport(false);
@@ -107,7 +117,10 @@ const Product = () => {
 
     if (category || brand || status) {
       dispatch(filterProducts(category, brand, status));
+    } else {
+      dispatch(Products());
     }
+
   }, [searchParams, dispatch]);
 
   useEffect(() => {
@@ -116,16 +129,18 @@ const Product = () => {
   }, [dispatch]);
 
   const handleOpenUpdate = (product) => {
-    setSelectedProductData(product); 
-    setOpenUpdateModal(true);        
+    setSelectedProductData(product);
+    setOpenUpdateModal(true);
   };
 
   const activeProductsCount = products ? products.filter(p => p.status === "Active" || p.stock > 0).length : 0;
+  const lowStockCount = products ? products.filter(p => p.stock > 0 && p.stock <= 10).length : 0;
+  const outOfStockCount = products ? products.filter(p => p.stock === 0).length : 0;
 
   const statsData = [
     { label: "Total Products", value: totalCount, sub: "All Products", icon: <InventoryIcon />, color: "#7C3AED", bg: "#F5F3FF" },
-    { label: "Low Stock", sub: "Reorder Soon", icon: <WarningIcon />, color: "#EA580C", bg: "#FFF7ED" },
-    { label: "Out of Stock", sub: "Not Available", icon: <BlockIcon />, color: "#DC2626", bg: "#FEF2F2" },
+    { label: "Low Stock", value: lowStockCount, sub: "Reorder Soon", icon: <WarningIcon />, color: "#EA580C", bg: "#FFF7ED" },
+    { label: "Out of Stock", value: outOfStockCount, sub: "Not Available", icon: <BlockIcon />, color: "#DC2626", bg: "#FEF2F2" },
     { label: "Active Products", value: activeProductsCount, sub: "Available", icon: <CheckCircleIcon />, color: "#16A34A", bg: "#F0FDF4" },
   ];
 
@@ -134,6 +149,30 @@ const Product = () => {
     setSelectedProductData(null);
   };
 
+  const handleReset = () => {
+    setCategory("All");
+    setBrand("All");
+    setStatus("All");
+
+    navigate("/admin/products");
+
+    dispatch(Products());
+  }
+
+  const handleImportSubmit = () => {
+    if (importFile) {
+      const formData = new FormData();
+      formData.append("file", importFile);
+      dispatch(importProductsFromExcel(formData));
+      handleCloseImport();
+    }
+  };
+
+  const handleExportSubmit = () => {
+    dispatch(exportProductsToExcel(selectedExportFormat));
+    handleCloseExport();
+  };
+  
   return (
     <Box sx={{ width: "100%", bgcolor: "#F8F9FC", minHeight: "100vh" }}>
       {/* HEADER SECTION */}
@@ -150,7 +189,6 @@ const Product = () => {
       >
         {/* Left Side: Title & Subtitle */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-
           <Box>
             <Typography variant="h6" sx={{ fontWeight: 800, lineHeight: 1.2 }}>
               Products
@@ -290,7 +328,6 @@ const Product = () => {
               }}
             >
               <DialogContent sx={{ p: 0 }}>
-                {/* AddProducts component ko open aur handleClose pass kiya */}
                 <AddProducts onClose={handleClose} />
               </DialogContent>
             </Dialog>
@@ -412,6 +449,7 @@ const Product = () => {
         {/* 6. Reset Button */}
         <Button
           variant="outlined"
+          onClick={handleReset}
           startIcon={<RestartAltIcon />}
           sx={{
             color: "#374151",
@@ -500,7 +538,7 @@ const Product = () => {
               >
                 <input type="file" accept=".csv, .xlsx" hidden onChange={(e) => console.log(e.target.files[0])} />
                 <Typography variant="body2" sx={{ fontWeight: 600, color: '#4F46E5' }}>
-                  Click to upload file
+                  {importFile ? importFile.name : "Click to upload file"}
                 </Typography>
                 <Typography variant="caption" color="text.secondary" display="block" sx={{ mt: 0.5 }}>
                   Supports CSV, XLSX up to 5MB
@@ -519,10 +557,11 @@ const Product = () => {
                 </Button>
                 <Button
                   fullWidth
+                  onClick={handleImportSubmit}
                   variant="contained"
                   sx={{ borderRadius: '10px', textTransform: 'none', fontWeight: 600, bgcolor: '#4F46E5', '&:hover': { bgcolor: '#4338CA' } }}
                 >
-                  Upload & Import
+                  {excelLoading ? "Uploading..." : "Upload & Import"}
                 </Button>
               </Stack>
             </Box>
@@ -541,7 +580,7 @@ const Product = () => {
         >
           <DialogContent>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, py: 2 }}>
-              
+
               <IconButton
                 onClick={handleCloseExport}
                 sx={{ position: 'absolute', top: 12, right: 12, color: '#9CA3AF' }}
@@ -565,10 +604,10 @@ const Product = () => {
               <Stack direction="row" spacing={2} sx={{ width: '100%', mb: 1 }}>
                 {/* Excel Format Card */}
                 <Box
-                  onClick={() => console.log('Excel format selected')}
+                  onClick={() => setSelectedExportFormat('xlsx')}
                   sx={{
                     flex: 1,
-                    border: '2px solid #10B981', 
+                    border: '2px solid #10B981',
                     borderRadius: '12px',
                     p: 3,
                     textAlign: 'center',
@@ -587,7 +626,7 @@ const Product = () => {
 
                 {/* CSV Format Card */}
                 <Box
-                  onClick={() => console.log('CSV format selected')}
+                  onClick={() => setSelectedExportFormat('csv')}
                   sx={{
                     flex: 1,
                     border: '2px solid #E5E7EB',

@@ -1,6 +1,9 @@
 import React from 'react';
 import { UserPlus, Star, IndianRupee, ArrowUpRight, ArrowDownRight, Search, Bell, ChevronDown, Users } from 'lucide-react';
 import CustomerTable from './CustomerTable';
+import { useNavigate } from 'react-router-dom';
+import { Avatar } from '@mui/material';
+import { useSelector } from "react-redux";
 
 const stats = [
     {
@@ -48,15 +51,9 @@ const StatCard = ({ icon: Icon, title, value, percentage, isUp, iconBgColor }) =
         {/* Content */}
         <div>
             <p
-                className="text-xs text-gray-500 font-medium"
-            >
-                {title}
-            </p>
+                className="text-xs text-gray-500 font-medium">{title}</p>
             <h3
-                className="text-xl font-bold text-gray-900 mt-1"
-            >
-                {value}
-            </h3>
+                className="text-xl font-bold text-gray-900 mt-1">{value}</h3>
             <div
                 className={`flex items-center mt-1 text-[10px] font-bold ${isUp ? 'text-green-500' : 'text-red-500'}`}
             >
@@ -70,6 +67,9 @@ const StatCard = ({ icon: Icon, title, value, percentage, isUp, iconBgColor }) =
 );
 
 const Customers = () => {
+
+    const auth = useSelector(store => store.auth);
+
     return (
         <>
             <div className="flex items-center justify-between w-full px-6 py-4 bg-white shadow-sm">
@@ -81,9 +81,6 @@ const Customers = () => {
                     </div>
                     <div>
                         <h1 className="text-xl font-bold text-gray-900 leading-tight">Customers</h1>
-                        <nav className="text-xs text-gray-500">
-                            <span>Dashboard</span> <span className="mx-1">{'>'}</span> <span className="text-indigo-600 font-medium">Customers</span>
-                        </nav>
                     </div>
                 </div>
 
@@ -112,11 +109,19 @@ const Customers = () => {
 
                     {/* User Profile */}
                     <div className="flex items-center space-x-3 cursor-pointer border-l pl-6 border-gray-200">
-                        <img
-                            src="https://via.placeholder.com/40"
-                            alt="Admin"
-                            className="w-10 h-10 rounded-full border border-gray-100"
-                        />
+                        <Avatar
+
+                            className="shadow-md border-2 border-indigo-100"
+                            sx={{
+                                bgcolor: "#9155fd",
+                                width: 36,
+                                height: 36,
+                                fontSize: '0.9rem',
+                                fontWeight: 'bold'
+                            }}
+                        >
+                            {auth?.user?.fullName?.charAt(0).toUpperCase() || 'U'}
+                        </Avatar>
                         <div className="text-left">
                             <p className="text-sm font-bold text-gray-900 leading-none">Admin</p>
                             <p className="text-xs text-gray-500">Administrator</p>

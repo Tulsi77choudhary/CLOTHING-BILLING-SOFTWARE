@@ -13,9 +13,9 @@ const AddProducts = ({ onClose }) => {
     category: '',
     brand: '',
     purchasePrice: '',
-    sellingPrice: '', 
+    sellingPrice: '',
     status: '',
-    stockQuantity: '', 
+    stockQuantity: '',
     size: '',
     image: null
   });
@@ -44,15 +44,15 @@ const AddProducts = ({ onClose }) => {
   return (
     <div className="w-full mx-auto p-6 bg-white relative rounded-xl max-w-4xl">
 
-       <button
-          type="button"
-          onClick={onClose}
-          className="absolute top-6 right-6 text-gray-400 hover:text-gray-600 transition-colors z-50 p-1 rounded-full hover:bg-gray-50"
-        >
-          <X size={24} />
-        </button>
+      <button
+        type="button"
+        onClick={onClose}
+        className="absolute top-6 right-6 text-gray-400 hover:text-gray-600 transition-colors z-50 p-1 rounded-full hover:bg-gray-50"
+      >
+        <X size={24} />
+      </button>
       <form onSubmit={handleSubmit} className="space-y-6">
-        
+
         {/* Section Heading Header */}
         <div className="flex items-center gap-2 mb-8 border-b border-gray-100 pb-4">
           <PackagePlus className="text-blue-600" size={22} />
@@ -145,7 +145,7 @@ const AddProducts = ({ onClose }) => {
             Pricing Details *
           </label>
           <div className="col-span-3 grid grid-cols-3 gap-4">
-            
+
             {/* Purchase Price */}
             <div className='flex flex-col gap-1'>
               <span className="text-xs text-gray-400 block mb-1">Purchase Price</span>
@@ -277,9 +277,8 @@ const AddProducts = ({ onClose }) => {
             <button
               type="submit"
               disabled={loading}
-              className={`${
-                loading ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
-              } text-white font-medium text-sm px-6 py-2.5 rounded-lg shadow-sm transition-colors duration-150`}
+              className={`${loading ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+                } text-white font-medium text-sm px-6 py-2.5 rounded-lg shadow-sm transition-colors duration-150`}
             >
               {loading ? 'Publishing...' : 'Publish Product'}
             </button>
