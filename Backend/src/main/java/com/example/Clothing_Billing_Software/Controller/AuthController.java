@@ -27,24 +27,41 @@ public class AuthController {
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterDto registerDto) {
         try {
             User registeredUser = userService.registerUser(registerDto);
-            registeredUser.setPassword(null);
+            registeredUser.setPassword(null); // Safety protection line
             return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
 
         } catch (IllegalArgumentException | IllegalStateException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
-
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("An error occurred during registration. Please try again later.");
         }
     }
 
-
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) throws UserException {
-        User user = userService.login(loginRequest.getEmail(), loginRequest.getPassword());
-        String token = jwtUtil.generateToken(user.getEmail());
-        return ResponseEntity.ok(new AuthResponse(token, "Login Success", user));
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        try {
+            // 1. Service Layer se user authenticate karein
+            User user = userService.login(loginRequest.getEmail(), loginRequest.getPassword());
+
+            // 2. JWT Token generate karein
+            String token = jwtUtil.generateToken(user.getEmail());
+
+            AuthResponse responsePayload = new AuthResponse(
+                    token,
+                    user.getRole(),
+                    "Login Success! Welcome to Dashboard.",
+                    user
+            );
+
+            return ResponseEntity.ok(responsePayload);
+
+        } catch (UserException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Something went wrong during login verification.");
+        }
     }
 }
 

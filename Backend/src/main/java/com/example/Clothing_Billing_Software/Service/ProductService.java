@@ -12,7 +12,6 @@ public interface ProductService {
     Optional<Product> getProductById(Long id);
     void deleteProduct(Long id);
     long getTotalProductCount();
-
     List<Product> getFilteredProducts(String category, String brand, String status);
     Product updateProduct(Long id, Product productDetails);
     List<Product> getProducts(String category);

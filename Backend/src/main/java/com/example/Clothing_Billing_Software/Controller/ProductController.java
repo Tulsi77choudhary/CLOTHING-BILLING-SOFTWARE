@@ -2,10 +2,14 @@ package com.example.Clothing_Billing_Software.Controller;
 
 import com.example.Clothing_Billing_Software.Entity.Product;
 //import com.example.Clothing_Billing_Software.Service.ProductExcelService;
+import com.example.Clothing_Billing_Software.Service.ProductExcelService;
 import com.example.Clothing_Billing_Software.Service.ProductService;
 import com.example.Clothing_Billing_Software.exception.ResourceNotFoundException;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +30,8 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-//    @Autowired
-//    private ProductExcelService excelService;
+    @Autowired
+    private ProductExcelService excelService;
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         Product savedProduct = productService.createProduct(product);
@@ -89,37 +93,37 @@ public class ProductController {
         }
     }
 
-//    @PostMapping("/import")
-//    public  ResponseEntity<?> importExcel(@RequestParam("file") MultipartFile file){
-//        if(file.isEmpty()){
-//            return  ResponseEntity.badRequest().body(Map.of("message","Please upload a valid excel file!"));
-//        }
-//
-//        try {
-//            excelService.importProductsFromExcel(file);
-//            return ResponseEntity.ok(Map.of("message", "Products imported successfully!"));
-//        } catch (IOException e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body(Map.of("message", "Failed to parse excel file: " + e.getMessage()));
-//        }
-//
-//    }
+    @PostMapping("/import")
+    public ResponseEntity<?> importExcel(@RequestParam("file") MultipartFile file) {
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("message", "Please upload a valid excel file!"));
+        }
 
-//    @GetMapping("/export")
-//    public ResponseEntity<Resource> exportExcel() {
-//        String filename = "products_catalogue.xlsx";
-//        try {
-//            ByteArrayInputStream in = excelService.exportProductsToExcel();
-//            InputStreamResource file = new InputStreamResource(in);
-//
-//            return ResponseEntity.ok()
-//                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
-//                    .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
-//                    .body(file);
-//        } catch (IOException e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-//        }
-//    }
+        try {
+            excelService.importProductsFromExcel(file);
+            return ResponseEntity.ok(Map.of("message", "Products imported successfully!"));
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("message", "Failed to parse excel file: " + e.getMessage()));
+        }
+    }
+
+    @GetMapping("/export")
+    public ResponseEntity<Resource> exportExcel() {
+        String filename = "products_catalogue.xlsx";
+        try {
+            ByteArrayInputStream in = excelService.exportProductsToExcel();
+            InputStreamResource file = new InputStreamResource(in);
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+                    .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                    .body((Resource) file);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteProduct(@PathVariable Long id) {

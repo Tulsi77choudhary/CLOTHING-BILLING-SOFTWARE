@@ -31,7 +31,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
-        if (path.startsWith("/api/auth") || (path.startsWith("/api/products"))){
+        // 1. Clean Path Normalization Bypass Check
+        // Kise bhi routing anomaly se bachne ke liye path strings ko completely lowercase normalize karke verify karein
+        if (path != null && (path.toLowerCase().contains("/api/auth") || path.toLowerCase().contains("/api/products"))) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // 2. React CORS Pre-flight mapping integration check
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            response.setStatus(HttpServletResponse.SC_OK);
             filterChain.doFilter(request, response);
             return;
         }
@@ -39,7 +48,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Missing or invalid Authorization header");
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"Missing or invalid Authorization header\"}");
             return;
         }
 
@@ -50,7 +60,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             username = jwtUtil.extractUsername(token);
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Invalid or expired JWT token");
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"Invalid or expired JWT token\"}");
             return;
         }
 
@@ -63,12 +74,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             } else {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("Invalid JWT token");
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\": \"Invalid JWT token\"}");
                 return;
             }
         }
 
         filterChain.doFilter(request, response);
     }
-
 }

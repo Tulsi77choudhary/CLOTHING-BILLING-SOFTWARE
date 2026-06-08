@@ -3,6 +3,7 @@ package com.example.Clothing_Billing_Software.Service;
 
 import com.example.Clothing_Billing_Software.Config.JwtUtil;
 import com.example.Clothing_Billing_Software.DTO.UserRegisterDto;
+import com.example.Clothing_Billing_Software.Entity.Role;
 import com.example.Clothing_Billing_Software.Entity.User;
 import com.example.Clothing_Billing_Software.Repository.UserRepository;
 import com.example.Clothing_Billing_Software.exception.UserException;
@@ -30,16 +31,12 @@ public class UserServiceImpl implements UserService{
         if (!registerDto.getPassword().equals(registerDto.getConfirmPassword())) {
             throw new IllegalArgumentException("Password and Confirm Password do not match!");
         }
-
-
         if (userRepository.existsByEmail(registerDto.getEmail())) {
             throw new IllegalStateException("Email identity is already registered inside SMMS system!");
         }
-
         if (userRepository.existsByPhone(registerDto.getPhone())) {
             throw new IllegalStateException("Phone number is already associated with another shop account!");
         }
-
         User newUser = new User();
         newUser.setFullName(registerDto.getFullName().trim());
         newUser.setEmail(registerDto.getEmail().toLowerCase().trim());
@@ -49,6 +46,12 @@ public class UserServiceImpl implements UserService{
 
         String securePasswordHash = passwordEncoder.encode(registerDto.getPassword());
         newUser.setPassword(securePasswordHash);
+
+        if(registerDto.getRole() == null){
+            newUser.setRole(Role.USER);
+        }else {
+            newUser.setRole(registerDto.getRole());
+        }
 
         return userRepository.save(newUser);
     }
@@ -62,8 +65,11 @@ public class UserServiceImpl implements UserService{
             throw new UserException("Invalid email or password");
         }
 
+        user.setPassword(null);
+        user.setConfirmPassword(null);
         return user;
     }
+
 
     @Override
     public User findUserProfileByJwt(String token) throws UserException {
@@ -71,6 +77,5 @@ public class UserServiceImpl implements UserService{
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserException("User not found for this token"));
     }
-
 
 }

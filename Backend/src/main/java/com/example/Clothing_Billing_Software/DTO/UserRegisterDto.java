@@ -1,5 +1,6 @@
 package com.example.Clothing_Billing_Software.DTO;
 
+import com.example.Clothing_Billing_Software.Entity.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -29,5 +30,7 @@ public class UserRegisterDto {
 
     @NotBlank(message = "Shop address is required")
     private String shopAddress;
+
+    private Role role;
 
 }
