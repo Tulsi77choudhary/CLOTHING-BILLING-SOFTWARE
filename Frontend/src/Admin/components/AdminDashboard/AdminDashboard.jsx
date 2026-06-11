@@ -60,11 +60,6 @@ const DashboardPage = () => {
         elevation={0}
         sx={{ p: 1.5, display: 'flex', alignItems: 'center', bgcolor: 'white', borderBottom: '1px solid #E5E7EB' }}
       >
-        <IconButton
-          sx={{ mr: 1 }}
-        >
-          <Menu />
-        </IconButton>
 
         {!isMobile && (
           <Box

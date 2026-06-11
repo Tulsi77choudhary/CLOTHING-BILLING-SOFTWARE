@@ -11,7 +11,6 @@ import {
 } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import CartSection from './CartSection';
-import CategoryBar from './CategoryBar';
 import AllProducts from './AllProducts';
 
 const SearchBox = styled(Box)(({ theme }) => ({
@@ -130,7 +129,6 @@ const Billing = () => {
       </AppBar>
 
       {/* MAIN DASHBOARD CONTENT AREA */}
-      {/* display: "flex" और flexDirection: { xs: "column", md: "row" } से ये डेस्कटॉप पर हमेशा साइड-बाय-साइड ही रहेगा */}
       <Box
         sx={{
           p: { xs: 1.5, sm: 2, md: 3 },
@@ -140,13 +138,11 @@ const Billing = () => {
           alignItems: "flex-start"
         }}
       >
-        {/* बायाँ हिस्सा: Categories और Products */}
+       
         <Box sx={{ flex: { xs: "1 1 100%", md: 8 }, width: "100%", display: "flex", flexDirection: "column", gap: 2 }}>
-          <CategoryBar />
           <AllProducts />
         </Box>
 
-        {/* दायाँ हिस्सा: Cart Section (यह अब हमेशा राइट में चिपका रहेगा) */}
         <Box sx={{
           flex: { xs: "1 1 100%", md: 4 },
           width: "100%",

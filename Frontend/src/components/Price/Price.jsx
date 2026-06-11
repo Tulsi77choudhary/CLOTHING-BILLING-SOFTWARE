@@ -1,54 +1,11 @@
 import React from 'react';
-import { CheckCircle } from 'lucide-react'; // Example icons
-
-const pricingPlans = [
-  {
-    name: "Free",
-    price: "₹0",
-    duration: "/5 days",
-    features: ["5 Days Trial", "Basic Features", "Limited Support"],
-    buttonText: "Start Free Trial",
-    color: "border-transparent"
-  },
-  {
-    name: "Silver",
-    price: "₹6,000",
-    duration: "/6 months",
-    features: ["180 Days", "Unlimited Features", "Priority Support"],
-    buttonText: "Choose Silver",
-    color: "border-transparent"
-  },
-  {
-    name: "Platinum",
-    price: "₹12,000",
-    duration: "/1 year",
-    features: ["365 Days", "Unlimited Features", "Premium Support"],
-    buttonText: "Choose Platinum",
-    highlight: "Most Popular",
-    color: "border-indigo-600",
-    btnColor: "bg-indigo-600"
-  },
-  {
-    name: "Gold",
-    price: "₹25,000",
-    duration: "/2 years",
-    features: ["730 Days", "Unlimited Features", "VIP Support"],
-    buttonText: "Choose Gold",
-    color: "border-yellow-500",
-    btnColor: "bg-yellow-500 text-black"
-  },
-  {
-    name: "Custom",
-    price: "Contact Us",
-    duration: "",
-    features: ["Custom Duration", "Custom Features", "Dedicated Support"],
-    buttonText: "Contact Sales",
-    color: "border-purple-600",
-    btnColor: "bg-purple-600"
-  }
-];
+import { CheckCircle } from 'lucide-react'; 
+import PricePlans from './PricePlans';
+import { useNavigate } from "react-router-dom";
 
 const Price = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="bg-slate-900 text-white py-16 px-4">
       <div className="max-w-7xl mx-auto text-center mb-12">
@@ -64,7 +21,7 @@ const Price = () => {
 
       {/* Responsive Grid: 1 col mobile, 2 col tablet, 5 col desktop */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 max-w-full mx-auto">
-        {pricingPlans.map((plan, index) => (
+        {PricePlans.map((plan, index) => (
           <div 
             key={index} 
             className={`relative bg-slate-800 rounded-2xl p-6 flex flex-col items-center border-2 transition-transform hover:scale-105 ${plan.color}`}
@@ -91,8 +48,17 @@ const Price = () => {
               ))}
             </ul>
 
-            <button className={`w-full py-3 rounded-xl font-bold transition-all border border-slate-700 hover:opacity-90 
-              ${plan.btnColor || 'bg-slate-700 text-white'}`}>
+            <button 
+            onClick={() => 
+              navigate("/register", { 
+                state: { 
+                  selectedPlan: plan 
+                },
+              })
+            }
+            className={`w-full py-3 rounded-xl font-bold transition-all border border-slate-700 hover:opacity-90 
+              ${plan.btnColor || 'bg-slate-700 text-white'}`}
+              >
               {plan.buttonText}
             </button>
           </div>

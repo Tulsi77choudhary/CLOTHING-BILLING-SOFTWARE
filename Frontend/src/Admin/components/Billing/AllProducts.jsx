@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Card,
@@ -8,6 +8,7 @@ import {
   MenuItem,
   Paper,
   Select,
+  styled
 } from "@mui/material";
 
 import SearchIcon from "@mui/icons-material/Search";
@@ -16,9 +17,42 @@ import DiscountIcon from "@mui/icons-material/Discount";
 import RecentIcon from "@mui/icons-material/History";
 import MoreIcon from "@mui/icons-material/MoreHoriz";
 import PaymentIcon from "@mui/icons-material/Payment";
+import CheckroomRoundedIcon from "@mui/icons-material/CheckroomRounded";
 import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
+import DryCleaningRoundedIcon from "@mui/icons-material/DryCleaningRounded";
+import BackpackRoundedIcon from "@mui/icons-material/BackpackRounded";
 import ViewListRoundedIcon from "@mui/icons-material/ViewListRounded";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
+
+const ScrollContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  gap: "8px",
+  width: "100%",
+  overflowX: "auto",
+  padding: "6px 2px",
+  [theme.breakpoints.up("md")]: {
+    overflowX: "visible",
+    flexWrap: "nowrap",
+  },
+  msOverflowStyle: "none",
+  scrollbarWidth: "none",
+  "&::-webkit-scrollbar": {
+    display: "none",
+  },
+}));
+
+const categories = [
+  { name: "All", icon: <GridViewRoundedIcon /> },
+  { name: "T-shirts", icon: <CheckroomRoundedIcon /> },
+  { name: "Shirts", icon: <DryCleaningRoundedIcon /> },
+  { name: "Jeans", icon: <DryCleaningRoundedIcon /> },
+  { name: "Jackets", icon: <CheckroomRoundedIcon /> },
+  { name: "Trousers", icon: <DryCleaningRoundedIcon /> },
+  { name: "Hoodies", icon: <CheckroomRoundedIcon /> },
+  { name: "Caps", icon: <BackpackRoundedIcon /> },
+  { name: "Accessories", icon: <BackpackRoundedIcon /> },
+];
 
 const products = [
   {
@@ -81,265 +115,351 @@ const actions = [
 ];
 
 function AllProducts() {
+  
+  const [active, setActive] = useState("All");
+
   return (
-    <Box
-      sx={{
-        p: { xs: 1.5, sm: 2 },
-        bgcolor: "#fff",
-        borderRadius: "12px",
-      }}
-    >
-      {/* Header Section */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          mb: 2,
-          flexWrap: "wrap",
-          gap: 1
-        }}
-      >
-        <Typography
-          sx={{
-            fontWeight: 700,
-            fontSize: "1rem",
-            color: "#111827",
-          }}
-        >
-          All Products
-        </Typography>
+    <>
+      <Box sx={{ width: "100%", overflow: "hidden" }}>
+        <ScrollContainer>
+          {categories.map((item, index) => {
+            const isActive = active === item.name;
 
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <Typography sx={{ fontSize: "0.75rem", color: "#6B7280" }}>
-            Sort By :
-          </Typography>
+            return (
+              <Box
+                key={index}
+                onClick={() => setActive(item.name)}
+                sx={{
+                  height: { xs: 54, sm: 58, md: 62 },
+                  width: { xs: 70, sm: 80, md: "100%" },
+                  minWidth: { xs: 70, sm: 80, md: "auto" },
+                  flex: { xs: "0 0 auto", md: 1 },
 
-          <Select
-            size="small"
-            defaultValue="new"
-            sx={{
-              minWidth: 110,
-              height: 34,
-              fontSize: "0.75rem",
-              borderRadius: "8px"
-            }}
-          >
-            <MenuItem value="new">Name A to Z</MenuItem>
-            <MenuItem value="low">Low to High</MenuItem>
-            <MenuItem value="high">High to Low</MenuItem>
-          </Select>
+                  borderRadius: "10px",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease-in-out",
 
-          <IconButton
-            size="small"
-            sx={{
-              bgcolor: "#7C3AED",
-              color: "#fff",
-              borderRadius: "8px",
-              "&:hover": { bgcolor: "#6D28D9" }
-            }}
-          >
-            <GridViewRoundedIcon fontSize="small" />
-          </IconButton>
+                  bgcolor: isActive ? "#7C3AED" : "#FFFFFF",
+                  color: isActive ? "#FFFFFF" : "#111827",
 
-          <IconButton
-            size="small"
-            sx={{
-              border: "1px solid #E5E7EB",
-              borderRadius: "8px",
-            }}
-          >
-            <ViewListRoundedIcon fontSize="small" />
-          </IconButton>
-        </Box>
+                  border: isActive
+                    ? "1px solid #7C3AED"
+                    : "1px solid #E5E7EB",
+
+                  boxShadow: isActive
+                    ? "0 4px 12px rgba(124,58,237,0.2)"
+                    : "none",
+
+                  "&:hover": {
+                    transform: "translateY(-2px)",
+                    boxShadow: "0 6px 12px rgba(0,0,0,0.06)",
+                    borderColor: "#7C3AED",
+                  },
+                  "&:active": {
+                    transform: "translateY(0px)",
+                  }
+                }}
+              >
+                {/* Icon Box */}
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    mb: 0.5,
+                    "& svg": {
+                      fontSize: { xs: 16, sm: 18, md: 20 },
+                    },
+                  }}
+                >
+                  {item.icon}
+                </Box>
+
+                {/* Text / Name */}
+                <Typography
+                  sx={{
+                    fontSize: { xs: "0.62rem", sm: "0.68rem", md: "0.72rem" },
+                    fontWeight: 600,
+                    textAlign: "center",
+                    lineHeight: 1,
+                    px: 0.5,
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    maxWidth: "100%",
+                  }}
+                >
+                  {item.name}
+                </Typography>
+              </Box>
+            );
+          })}
+        </ScrollContainer>
       </Box>
 
-      {/* Product Grid - Fixed Column Breakdown for Dashboard layout */}
       <Box
         sx={{
-          display: "grid",
-          gridTemplateColumns: {
-            xs: "repeat(2, 1fr)",
-            sm: "repeat(3, 1fr)",
-            md: "repeat(3, 1fr)",
-            lg: "repeat(4, 1fr)",
-          },
-          gap: { xs: 1.2, sm: 2 },
+          p: { xs: 1.5, sm: 2 },
+          bgcolor: "#fff",
+          borderRadius: "12px",
         }}
       >
-        {products.map((product, index) => (
-          <Card
-            key={index}
-            elevation={0}
+        {/* Header Section */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: 2,
+            flexWrap: "wrap",
+            gap: 1
+          }}
+        >
+          <Typography
             sx={{
-              border: "1px solid #E5E7EB",
-              borderRadius: "12px",
-              position: "relative",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "between",
-              transition: "all 0.2s ease-in-out",
-              "&:hover": {
-                boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
-                borderColor: "#7C3AED"
-              },
+              fontWeight: 700,
+              fontSize: "1rem",
+              color: "#111827",
             }}
           >
-            {/* Round Add Button */}
+            All Products
+          </Typography>
+
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Typography sx={{ fontSize: "0.75rem", color: "#6B7280" }}>
+              Sort By :
+            </Typography>
+
+            <Select
+              size="small"
+              defaultValue="new"
+              sx={{
+                minWidth: 110,
+                height: 34,
+                fontSize: "0.75rem",
+                borderRadius: "8px"
+              }}
+            >
+              <MenuItem value="new">Name A to Z</MenuItem>
+              <MenuItem value="low">Low to High</MenuItem>
+              <MenuItem value="high">High to Low</MenuItem>
+            </Select>
+
             <IconButton
               size="small"
               sx={{
-                position: "absolute",
-                top: 8,
-                right: 8,
-                width: 22,
-                height: 22,
-                bgcolor: "#F3F4F6",
-                color: "#7C3AED",
-                zIndex: 2,
-                "&:hover": { bgcolor: "#7C3AED", color: "#fff" }
+                bgcolor: "#7C3AED",
+                color: "#fff",
+                borderRadius: "8px",
+                "&:hover": { bgcolor: "#6D28D9" }
               }}
             >
-              <AddRoundedIcon sx={{ fontSize: 14 }} />
+              <GridViewRoundedIcon fontSize="small" />
             </IconButton>
 
-            {/* Product Image Wrapper */}
-            <Box
+            <IconButton
+              size="small"
               sx={{
-                height: { xs: 100, sm: 120 },
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                p: 1.5,
-                bgcolor: "#F9FAFB",
-                borderRadius: "12px 12px 0 0"
+                border: "1px solid #E5E7EB",
+                borderRadius: "8px",
               }}
             >
-              <Box
-                component="img"
-                src={product.image}
-                alt={product.name}
-                sx={{
-                  maxWidth: "100%",
-                  maxHeight: "100%",
-                  objectFit: "contain",
-                  borderRadius: "6px"
-                }}
-              />
-            </Box>
+              <ViewListRoundedIcon fontSize="small" />
+            </IconButton>
+          </Box>
+        </Box>
 
-            {/* Content Details */}
-            <CardContent
-              sx={{ p: "12px !important", flexGrow: 1, display: "flex", flexDirection: "column", justifyBetween: "space-between" }}
-            >
-              <Box>
-                <Typography
-                  sx={{
-                    fontSize: { xs: "0.75rem", sm: "0.85rem" },
-                    fontWeight: 700,
-                    color: "#111827",
-                    lineHeight: 1.3,
-                    mb: 0.5
-                  }}
-                >
-                  {product.name}
-                </Typography>
-
-                <Typography
-                  sx={{
-                    fontSize: "0.65rem",
-                    color: "#9CA3AF",
-                    mb: 1.5,
-                  }}
-                >
-                  {product.code}
-                </Typography>
-              </Box>
-
-              <Typography
-                sx={{
-                  fontSize: { xs: "0.85rem", sm: "0.95rem" },
-                  fontWeight: 800,
-                  color: "#4F46E5",
-                  mt: "auto"
-                }}
-              >
-                {product.price}
-              </Typography>
-            </CardContent>
-          </Card>
-        ))}
-      </Box>
-
-      {/* Quick Actions Footer (Responsive Wrap) */}
-      <Box
-        sx={{ mt: 3, borderTop: "1px solid #E5E7EB", pt: 2 }}
-      >
-        <Typography
-          sx={{
-            fontWeight: 700,
-            mb: 1.5,
-            fontSize: "0.85rem",
-            color: "#374151"
-          }}
-        >
-          Quick Action Keys
-        </Typography>
-
+        {/* Product Grid - Fixed Column Breakdown for Dashboard layout */}
         <Box
           sx={{
             display: "grid",
             gridTemplateColumns: {
-              xs: "repeat(3, 1fr)",
-              sm: "repeat(6, 1fr)"
+              xs: "repeat(2, 1fr)",
+              sm: "repeat(3, 1fr)",
+              md: "repeat(3, 1fr)",
+              lg: "repeat(4, 1fr)",
             },
-            gap: 1,
+            gap: { xs: 1.2, sm: 2 },
           }}
         >
-          {actions.map((item, index) => (
-            <Paper
+          {products.map((product, index) => (
+            <Card
               key={index}
               elevation={0}
               sx={{
-                py: 1.2,
-                px: 0.5,
                 border: "1px solid #E5E7EB",
-                borderRadius: "8px",
-                textAlign: "center",
-                cursor: "pointer",
-                transition: "all 0.2s",
-                "&:hover": { bgcolor: "#F9FAFB", borderColor: "#9CA3AF" }
+                borderRadius: "12px",
+                position: "relative",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between", 
+                transition: "all 0.2s ease-in-out",
+                "&:hover": {
+                  boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+                  borderColor: "#7C3AED"
+                },
               }}
             >
+              {/* Round Add Button */}
+              <IconButton
+                size="small"
+                sx={{
+                  position: "absolute",
+                  top: 8,
+                  right: 8,
+                  width: 22,
+                  height: 22,
+                  bgcolor: "#F3F4F6",
+                  color: "#7C3AED",
+                  zIndex: 2,
+                  "&:hover": { bgcolor: "#7C3AED", color: "#fff" }
+                }}
+              >
+                <AddRoundedIcon sx={{ fontSize: 14 }} />
+              </IconButton>
+
+              {/* Product Image Wrapper */}
               <Box
                 sx={{
-                  color: "#4B5563",
-                  "& svg": {
-                    fontSize: 20,
-                  },
+                  height: { xs: 100, sm: 120 },
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  p: 1.5,
+                  bgcolor: "#F9FAFB",
+                  borderRadius: "12px 12px 0 0"
                 }}
               >
-                {item.icon}
+                <Box
+                  component="img"
+                  src={product.image}
+                  alt={product.name}
+                  sx={{
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                    objectFit: "contain",
+                    borderRadius: "6px"
+                  }}
+                />
               </Box>
 
-              <Typography
-                sx={{
-                  fontSize: "0.65rem",
-                  fontWeight: 600,
-                  color: "#374151",
-                  mt: 0.5,
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis"
-                }}
+              {/* Content Details */}
+              <CardContent
+                sx={{ p: "12px !important", flexGrow: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }} // FIXED: justifyBetween to justifyContent
               >
-                {item.label}
-              </Typography>
-            </Paper>
+                <Box>
+                  <Typography
+                    sx={{
+                      fontSize: { xs: "0.75rem", sm: "0.85rem" },
+                      fontWeight: 700,
+                      color: "#111827",
+                      lineHeight: 1.3,
+                      mb: 0.5
+                    }}
+                  >
+                    {product.name}
+                  </Typography>
+
+                  <Typography
+                    sx={{
+                      fontSize: "0.65rem",
+                      color: "#9CA3AF",
+                      mb: 1.5,
+                    }}
+                  >
+                    {product.code}
+                  </Typography>
+                </Box>
+
+                <Typography
+                  sx={{
+                    fontSize: { xs: "0.85rem", sm: "0.95rem" },
+                    fontWeight: 800,
+                    color: "#4F46E5",
+                    mt: "auto"
+                  }}
+                >
+                  {product.price}
+                </Typography>
+              </CardContent>
+            </Card>
           ))}
         </Box>
+
+        {/* Quick Actions Footer (Responsive Wrap) */}
+        <Box
+          sx={{ mt: 3, borderTop: "1px solid #E5E7EB", pt: 2 }}
+        >
+          <Typography
+            sx={{
+              fontWeight: 700,
+              mb: 1.5,
+              fontSize: "0.85rem",
+              color: "#374151"
+            }}
+          >
+            Quick Action Keys
+          </Typography>
+
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: {
+                xs: "repeat(3, 1fr)",
+                sm: "repeat(6, 1fr)"
+              },
+              gap: 1,
+            }}
+          >
+            {actions.map((item, index) => (
+              <Paper
+                key={index}
+                elevation={0}
+                sx={{
+                  py: 1.2,
+                  px: 0.5,
+                  border: "1px solid #E5E7EB",
+                  borderRadius: "8px",
+                  textAlign: "center",
+                  cursor: "pointer",
+                  transition: "all 0.2s",
+                  "&:hover": { bgcolor: "#F9FAFB", borderColor: "#9CA3AF" }
+                }}
+              >
+                <Box
+                  sx={{
+                    color: "#4B5563",
+                    "& svg": {
+                      fontSize: 20,
+                    },
+                  }}
+                >
+                  {item.icon}
+                </Box>
+
+                <Typography
+                  sx={{
+                    fontSize: "0.65rem",
+                    fontWeight: 600,
+                    color: "#374151",
+                    mt: 0.5,
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis"
+                  }}
+                >
+                  {item.label}
+                </Typography>
+              </Paper>
+            ))}
+          </Box>
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 }
 

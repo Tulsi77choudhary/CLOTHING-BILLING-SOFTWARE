@@ -1,12 +1,15 @@
 import React, { useEffect } from 'react';
 import { FaUser, FaEnvelope, FaPhone, FaLock, FaStore, FaMapMarkerAlt, FaUsers, FaTimes } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { register } from '../../State/Auth/Auth';
 import { useDispatch, useSelector } from "react-redux";
+import { CheckCircle } from 'lucide-react';
 
 const Register = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
+  const selectedPlan = location.state?.selectedPlan;
 
   const auth = useSelector((store) => store.auth);
   console.log("----", auth);
@@ -31,7 +34,7 @@ const Register = () => {
       email: data.get("email"),
       phone: data.get("phone"),
       password: data.get("password"),
-     confirmPassword: data.get("confirmPassword"),
+      confirmPassword: data.get("confirmPassword"),
       shopName: data.get("shopName"),
       shopAddress: data.get("shopAddress"),
       referredBy: data.get("referredBy"),
@@ -62,6 +65,18 @@ const Register = () => {
           </div>
           <p className="text-gray-400 text-xs mt-1">Please fill in all details to set up your store</p>
         </div>
+
+        {selectedPlan && (
+          <div className="bg-emerald-500 text-white rounded-xl p-5 mb-8 flex items-center gap-4">
+            <CheckCircle size={32} />
+            <div>
+              <p className="text-sm">Selected Plan</p>
+              <h3 className="text-2xl font-bold">
+                {selectedPlan.name} Plan
+              </h3>
+            </div>
+          </div>
+        )}
 
         {/* --- Single Form Element --- */}
         <form className="space-y-6" onSubmit={handleSubmit}>
@@ -107,7 +122,7 @@ const Register = () => {
               ></textarea>
             </div>
 
-            {/* <div className="space-y-2">
+            <div className="space-y-2">
               <label className="flex items-center gap-2 text-[#22c55e] text-sm font-semibold">
                 <FaUsers size={14} /> Referred By <span className="text-gray-500 font-normal ml-1 text-xs">(Optional)</span>
               </label>
@@ -117,7 +132,7 @@ const Register = () => {
                 placeholder="Enter referrer name or code (optional)"
                 className="w-full bg-[#1e293b] border border-gray-500 rounded-xl px-4 py-3 text-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#22c55e] focus:border-transparent transition-all placeholder:text-gray-500"
               />
-            </div> */}
+            </div>
           </div>
 
           {/* --- Footer Action Row --- */}
