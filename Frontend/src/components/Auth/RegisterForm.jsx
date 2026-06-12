@@ -15,10 +15,11 @@ const Register = () => {
   console.log("----", auth);
 
   useEffect(() => {
-    if (auth.user) {
-      navigate("/")
+    if (auth.registerSuccess) {
+      alert("Registration Successful!");
+      navigate("/login");
     }
-  }, [auth.user, navigate]);
+  }, [auth.registerSuccess, navigate]);
 
 
   const handleClose = () => {
@@ -87,14 +88,47 @@ const Register = () => {
               Personal Details
             </h2>
 
-            <InputField icon={<FaUser />} label="Full Name" name="fullName" placeholder="Enter full name" type="text" required />
-            <InputField icon={<FaEnvelope />} label="Email" name="email" placeholder="Enter email" type="email" required />
-            <InputField icon={<FaPhone />} label="Phone" name="phone" placeholder="Enter phone number" type="tel" required />
+            <InputField
+              icon={<FaUser />}
+              label="Full Name"
+              name="fullName"
+              placeholder="Enter full name"
+              type="text"
+              required
+            />
+            <InputField
+              icon={<FaEnvelope />}
+              label="Email"
+              name="email"
+              placeholder="Enter email"
+              type="email" required
+            />
+            <InputField
+              icon={<FaPhone />}
+              label="Phone"
+              name="phone"
+              placeholder="Enter phone number"
+              type="tel" required
+            />
 
             {/* Password Grid Column side-by-side on desktop */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <InputField icon={<FaLock />} label="Password" name="password" placeholder="Set password" type="password" required />
-              <InputField icon={<FaLock />} label="Confirm Password" name="confirmPassword" placeholder="Confirm password" type="password" required />
+              <InputField
+                icon={<FaLock />}
+                label="Password"
+                name="password"
+                placeholder="Set password"
+                type="password"
+                required
+              />
+              <InputField
+                icon={<FaLock />}
+                label="Confirm Password"
+                name="confirmPassword"
+                placeholder="Confirm password"
+                type="password"
+                required
+              />
             </div>
           </div>
 
@@ -107,7 +141,13 @@ const Register = () => {
               Shop Details
             </h2>
 
-            <InputField icon={<FaStore />} label="Shop Name" name="shopName" placeholder="Enter shop name" type="text" required />
+            <InputField
+              icon={<FaStore />}
+              label="Shop Name"
+              name="shopName"
+              placeholder="Enter shop name"
+              type="text" required
+            />
 
             <div className="space-y-2">
               <label className="flex items-center gap-2 text-[#22c55e] text-sm font-semibold">
@@ -123,8 +163,11 @@ const Register = () => {
             </div>
 
             <div className="space-y-2">
-              <label className="flex items-center gap-2 text-[#22c55e] text-sm font-semibold">
-                <FaUsers size={14} /> Referred By <span className="text-gray-500 font-normal ml-1 text-xs">(Optional)</span>
+              <label 
+              className="flex items-center gap-2 text-[#22c55e] text-sm font-semibold"
+              >
+                <FaUsers 
+                size={14} /> Referred By <span className="text-gray-500 font-normal ml-1 text-xs">(Optional)</span>
               </label>
               <input
                 type="text"

@@ -3,7 +3,7 @@ import { API_BASE_URL, api } from "../../config/apiConfig";
 import {
   LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE,
   REGISTER_FAILURE, REGISTER_REQUEST, REGISTER_SUCCESS,
-  
+
 } from "./AuthType";
 
 
@@ -13,11 +13,10 @@ export const register = (userData) => async (dispatch) => {
     const response = await axios.post(`${API_BASE_URL}/api/auth/register`, userData);
     const user = response.data;
 
-    if (user.jwt) {
-      localStorage.setItem("jwt", user.jwt);
-    }
-
-    dispatch({ type: REGISTER_SUCCESS, payload: user });
+    dispatch({
+      type: REGISTER_SUCCESS,
+      payload: user
+    });
     console.log("Registered user:", user);
   } catch (error) {
     dispatch({ type: REGISTER_FAILURE, payload: error.response?.data || error.message });
