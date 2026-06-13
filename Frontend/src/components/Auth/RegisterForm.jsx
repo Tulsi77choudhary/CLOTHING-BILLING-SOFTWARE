@@ -110,7 +110,6 @@ const Register = () => {
               placeholder="Enter phone number"
               type="tel" required
             />
-
             {/* Password Grid Column side-by-side on desktop */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <InputField

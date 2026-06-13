@@ -16,7 +16,7 @@ const ContactModal = ({ isOpen, onClose }) => {
     setError(false);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000)); 
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       setSuccess(true);
       formRef.current.reset();
       // Optionally: setTimeout(() => onClose(), 3000); // Success ke baad band karne ke liye
@@ -30,16 +30,16 @@ const ContactModal = ({ isOpen, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Overlay: Ispe click karne se modal band ho jayega */}
-      <div 
+      <div
         className="absolute inset-0 bg-black/70 backdrop-blur-sm"
         onClick={onClose}
       ></div>
 
       {/* Modal Content */}
       <div className="relative bg-gray-900 w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl border border-gray-700 animate-in fade-in zoom-in duration-300">
-        
+
         {/* Close Button */}
-        <button 
+        <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
         >
@@ -55,9 +55,20 @@ const ContactModal = ({ isOpen, onClose }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Details */}
             <div className="space-y-6">
-              <ContactDetail icon={<FaEnvelope />} title="Email" text="info@tsarit.com" />
-              <ContactDetail icon={<FaPhone />} title="Phone" text="+91 9876543210" />
-              <ContactDetail icon={<FaMapMarkerAlt />} title="Location" text="Hyderabad, India" />
+              <ContactDetail
+                icon={<FaEnvelope />}
+                title="Email"
+                text="info@tsarit.com"
+              />
+              <ContactDetail
+                icon={<FaPhone />}
+                title="Phone"
+                text="+91 7013375074" />
+              <ContactDetail
+                icon={<FaMapMarkerAlt />}
+                title="Location"
+                text="Hyderabad, India"
+              />
             </div>
 
             {/* Form */}

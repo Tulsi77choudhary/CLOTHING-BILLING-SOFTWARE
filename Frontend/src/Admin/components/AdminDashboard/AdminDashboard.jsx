@@ -2,6 +2,9 @@ import { useState } from 'react';
 import SalesChart from './SalesChart';
 import { useNavigate } from 'react-router-dom';
 import CategoryChart from './CategoryChart';
+import RecentOrders from './RecentOrder';
+import LowStockAlert from './LowStockAlert';
+
 import {
   Box, Grid, Paper, Typography, Button, IconButton, Avatar, Badge,
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
@@ -234,7 +237,6 @@ const DashboardPage = () => {
           container spacing={6}
           sx={{ mt: 1 }}
         >
-
           {/* Sales Overview Chart (Left Side - occupies 8/12 columns on desktop) */}
           <Grid
             item xs={12}
@@ -250,7 +252,6 @@ const DashboardPage = () => {
               <SalesChart />
             </Box>
           </Grid>
-
           {/* Category Chart (Right Side - occupies 4/12 columns on desktop) */}
           <Grid
             item xs={12}
@@ -270,7 +271,7 @@ const DashboardPage = () => {
           <Grid item xs={12} md={4}>
             <Box
               sx={{
-                boxShadow: '0px 10px 15px -3px rgba(156, 163, 175, 0.3)', // Box shadow consistent rakhi hai
+                boxShadow: '0px 10px 15px -3px rgba(156, 163, 175, 0.3)',
                 borderRadius: '16px',
                 height: '100%',
               }}
@@ -279,15 +280,49 @@ const DashboardPage = () => {
             </Box>
           </Grid>
 
-        </Grid>
+          <Grid container spacing={3} alignItems="stretch">
+            <Grid item xs={12} md={8} sx={{ display: "flex" }}>
+              <Box
+                sx={{
+                  flex: 1,
+                  boxShadow: "0px 10px 15px -3px rgba(156, 163, 175, 0.3)",
+                  borderRadius: "16px",
+                }}
+              >
+                <RecentOrders />
+              </Box>
+            </Grid>
 
+            <Grid item xs={12} md={4} sx={{ display: "flex" }}>
+              <Box
+                sx={{
+                  flex: 1,
+                  boxShadow: "0px 10px 15px -3px rgba(156, 163, 175, 0.3)",
+                  borderRadius: "16px",
+                }}
+              >
+                <LowStockAlert />
+              </Box>
+            </Grid>
+          </Grid>
+        </Grid>
 
         {/* --- Footer --- */}
         <Box
           sx={{ mt: 5, textAlign: isMobile ? 'center' : 'left', borderTop: '1px solid #EEE', pt: 2 }}
         >
           <Typography
-            variant="caption" color="text.secondary">© 2024 TSAR IT PVT LTD</Typography>
+            variant="caption"
+            color="text.secondary"
+          >
+            © 2024 TSAR IT PVT LTD
+          </Typography>
+          <Typography
+            variant="caption"
+            color="text.secondary"
+          >
+            +91 7013375074 |
+          </Typography>
         </Box>
       </div>
     </Box >

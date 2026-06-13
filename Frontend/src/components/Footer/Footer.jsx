@@ -12,6 +12,8 @@ import {
   TwitterLogoIcon,
 } from "@phosphor-icons/react";
 
+import { FaUserShield } from "react-icons/fa";
+
 const Footer = () => {
   return (
     <footer className="bg-[#00001a] text-white">
@@ -108,7 +110,7 @@ const Footer = () => {
 
               <div className="flex items-center gap-3">
                 <Phone size={18} />
-                <p>+91 9876543210</p>
+                <p> +91 7013375074 </p>
               </div>
 
               <div className="flex items-center gap-3">
@@ -131,23 +133,17 @@ const Footer = () => {
           {/* Newsletter */}
           <div>
             <h2 className="text-lg font-semibold mb-4">
-              Newsletter
+              Super Admin Login
             </h2>
 
             <p className="text-gray-300 text-sm mb-4">
-              Subscribe to get updates on new features & offers.
+              Sign in as an administrator to manage inventory, billing, sales reports, and customer records.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3">
-
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="w-full px-4 py-2 rounded-lg text-gray-800 placeholder:text-gray-400 bg-white border border-gray-600 focus:ring-blue-500"
-              />
-
-              <button className="bg-purple-600 px-2 py-2 rounded-lg hover:bg-purple-700 transition whitespace-nowrap">
-                Subscribe
+              <button className="flex items-center gap-2 bg-purple-600 px-4 py-2 rounded-lg hover:bg-purple-700 transition whitespace-nowrap">
+                <FaUserShield />
+                Login
               </button>
             </div>
           </div>
