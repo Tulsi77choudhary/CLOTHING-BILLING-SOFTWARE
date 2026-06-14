@@ -18,10 +18,17 @@ public class Product {
     @ExcelProperty("Product Name")
     @Column(unique = true)
     private String sku;
-    private String category;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "category")
+    private ProductCategory category;
+
     private String brand;
     private String size;
     private Double price;
     private Integer stock;
     private String status;
+
+//    @Column(unique = true)
+//    private Integer barcode;
 }

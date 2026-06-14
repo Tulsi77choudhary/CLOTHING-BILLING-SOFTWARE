@@ -27,7 +27,7 @@ public class AuthController {
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterDto registerDto) {
         try {
             User registeredUser = userService.registerUser(registerDto);
-            registeredUser.setPassword(null); // Safety protection line
+            registeredUser.setPassword(null);
             return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
 
         } catch (IllegalArgumentException | IllegalStateException e) {
@@ -49,7 +49,7 @@ public class AuthController {
 
             AuthResponse responsePayload = new AuthResponse(
                     token,
-                    user.getRole(),
+//                    user.getRole(),
                     "Login Success! Welcome to Dashboard.",
                     user
             );

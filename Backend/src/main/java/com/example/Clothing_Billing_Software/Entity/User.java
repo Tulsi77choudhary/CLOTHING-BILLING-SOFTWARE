@@ -33,7 +33,7 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Transient // Yeh database mein column nahi banayega, sirf validation ke liye use hoga
+    @Transient
     private String confirmPassword;
 
     @Column(name = "shop_name", nullable = false)
@@ -42,7 +42,6 @@ public class User {
     @Column(name = "shop_address", nullable = false, columnDefinition = "TEXT")
     private String shopAddress;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
-    private Role role;
+    private String referredBy;
+
 }

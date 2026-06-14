@@ -3,7 +3,7 @@ package com.example.Clothing_Billing_Software.Service;
 
 import com.example.Clothing_Billing_Software.Config.JwtUtil;
 import com.example.Clothing_Billing_Software.DTO.UserRegisterDto;
-import com.example.Clothing_Billing_Software.Entity.Role;
+
 import com.example.Clothing_Billing_Software.Entity.User;
 import com.example.Clothing_Billing_Software.Repository.UserRepository;
 import com.example.Clothing_Billing_Software.exception.UserException;
@@ -43,15 +43,10 @@ public class UserServiceImpl implements UserService{
         newUser.setPhone(registerDto.getPhone().trim());
         newUser.setShopName(registerDto.getShopName().trim());
         newUser.setShopAddress(registerDto.getShopAddress().trim());
+        newUser.setReferredBy(registerDto.getReferredBy().trim());
 
         String securePasswordHash = passwordEncoder.encode(registerDto.getPassword());
         newUser.setPassword(securePasswordHash);
-
-        if(registerDto.getRole() == null){
-            newUser.setRole(Role.USER);
-        }else {
-            newUser.setRole(registerDto.getRole());
-        }
 
         return userRepository.save(newUser);
     }
