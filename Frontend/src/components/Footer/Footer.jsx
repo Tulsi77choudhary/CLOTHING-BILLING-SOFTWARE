@@ -1,5 +1,6 @@
 
-import React from "react";
+import React, { useState } from 'react';
+
 import {
   FacebookLogo,
   InstagramLogo,
@@ -13,8 +14,11 @@ import {
 } from "@phosphor-icons/react";
 
 import { FaUserShield } from "react-icons/fa";
+import LoginModel from './LoginModel';
 
 const Footer = () => {
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <footer className="bg-[#00001a] text-white">
       <div className="max-w-7xl mx-auto px-6 py-10">
@@ -141,11 +145,19 @@ const Footer = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3">
-              <button className="flex items-center gap-2 bg-purple-600 px-4 py-2 rounded-lg hover:bg-purple-700 transition whitespace-nowrap">
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="flex items-center gap-2 bg-purple-600 px-4 py-2 rounded-lg hover:bg-purple-700 transition whitespace-nowrap">
                 <FaUserShield />
                 Login
               </button>
             </div>
+
+            {/* Login Modal */}
+            <LoginModel
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+            />
           </div>
         </div>
 
@@ -159,4 +171,3 @@ const Footer = () => {
 };
 
 export default Footer;
-

@@ -82,19 +82,14 @@ const Product = () => {
   console.log("total product count++++", totalCount);
   console.log("=== ", filter);
 
-  const handleFilter = () => {
-    navigate(
-      `/admin/products?category=${category}&brand=${brand}&status=${status}`
-    );
-  };
-
   const [searchParams] = useSearchParams();
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [selectedProductData, setSelectedProductData] = useState(null);
 
-  const [category, setCategory] = useState("All");
-  const [brand, setBrand] = useState("All");
-  const [status, setStatus] = useState("All");
+  const [category, setCategory] = useState("ALL");
+  const [brand, setBrand] = useState("ALL");
+  const [status, setStatus] = useState("ALL");
+
   const [open, setOpen] = useState(false);
   const [importFile, setImportFile] = useState(null);
   const [page, setPage] = useState(1);
@@ -105,7 +100,7 @@ const Product = () => {
   const [openImport, setOpenImport] = useState(false);
   const handleOpenImport = () => setOpenImport(true);
   const handleCloseImport = () => setOpenImport(false);
-const [selectedExportFormat, setSelectedExportFormat] = useState('xlsx'); 
+  const [selectedExportFormat, setSelectedExportFormat] = useState('xlsx');
   const [openExport, setOpenExport] = useState(false);
   const handleOpenExport = () => setOpenExport(true);
   const handleCloseExport = () => setOpenExport(false);
@@ -149,15 +144,32 @@ const [selectedExportFormat, setSelectedExportFormat] = useState('xlsx');
     setSelectedProductData(null);
   };
 
+  const handleFilter = () => {
+    const params = new URLSearchParams();
+
+    if (category && category !== "ALL") {
+      params.append("category", category);
+    }
+
+    if (brand && brand !== "ALL") {
+      params.append("brand", brand);
+    }
+
+    if (status && status !== "All") {
+      params.append("status", status);
+    }
+
+    navigate(`/admin/products?${params.toString()}`);
+  };
+
   const handleReset = () => {
-    setCategory("All");
-    setBrand("All");
-    setStatus("All");
+    setCategory("ALL");
+    setBrand("ALL");
+    setStatus("ALL");
 
     navigate("/admin/products");
-
     dispatch(Products());
-  }
+  };
 
   const handleImportSubmit = () => {
     if (importFile) {
@@ -172,7 +184,7 @@ const [selectedExportFormat, setSelectedExportFormat] = useState('xlsx');
     dispatch(exportProductsToExcel(selectedExportFormat));
     handleCloseExport();
   };
-  
+
   return (
     <Box sx={{ width: "100%", bgcolor: "#F8F9FC", minHeight: "100vh" }}>
       {/* HEADER SECTION */}
@@ -385,9 +397,12 @@ const [selectedExportFormat, setSelectedExportFormat] = useState('xlsx');
             onChange={(e) => setCategory(e.target.value)}
             sx={{ borderRadius: "10px", fontSize: "0.85rem" }}
           >
-            <MenuItem value="All">All Categories</MenuItem>
-            <MenuItem value="Clothing">Clothing</MenuItem>
-            <MenuItem value="Electronics">Electronics</MenuItem>
+            <MenuItem value="ALL">All Categories</MenuItem>
+            <MenuItem value="T_SHIRTS">T-Shirts</MenuItem>
+            <MenuItem value="SHIRTS">Shirts</MenuItem>
+            <MenuItem value="JEANS">Jeans</MenuItem>
+            <MenuItem value="JACKETS">Jackets</MenuItem>
+            <MenuItem value="ACCESSORIES">Accessories</MenuItem>
           </Select>
         </Box>
 
@@ -403,9 +418,10 @@ const [selectedExportFormat, setSelectedExportFormat] = useState('xlsx');
             onChange={(e) => setBrand(e.target.value)}
             sx={{ borderRadius: "10px", fontSize: "0.85rem" }}
           >
-            <MenuItem value="All">All Brands</MenuItem>
-            <MenuItem value="Nike">Nike</MenuItem>
-            <MenuItem value="Puma">Puma</MenuItem>
+            <MenuItem value="ALL">All Brands</MenuItem>
+            <MenuItem value="NIKE">Nike</MenuItem>
+            <MenuItem value="PUMA">Puma</MenuItem>
+            <MenuItem value="ADIDAS">Adidas</MenuItem>
           </Select>
         </Box>
 
@@ -421,9 +437,9 @@ const [selectedExportFormat, setSelectedExportFormat] = useState('xlsx');
             onChange={(e) => setStatus(e.target.value)}
             sx={{ borderRadius: "10px", fontSize: "0.85rem" }}
           >
-            <MenuItem value="All">All Status</MenuItem>
-            <MenuItem value="Active">Active</MenuItem>
-            <MenuItem value="Inactive">Inactive</MenuItem>
+            <MenuItem value="ALL">All Status</MenuItem>
+            <MenuItem value="ACTIVE">Active</MenuItem>
+            <MenuItem value="INACTIVE">Inactive</MenuItem>
           </Select>
         </Box>
 
