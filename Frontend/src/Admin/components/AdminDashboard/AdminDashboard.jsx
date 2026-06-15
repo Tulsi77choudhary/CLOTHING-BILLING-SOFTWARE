@@ -31,7 +31,13 @@ const WARNING_RED = "#EF4444";
 const lineData = [{ name: '01 May', value: 10000 }, { name: '06 May', value: 15000 }, { name: '11 May', value: 12000 }, { name: '16 May', value: 25000 }, { name: '21 May', value: 20000 }, { name: '26 May', value: 32000 }, { name: '31 May', value: 45000 }];
 const categoryData = [{ name: 'Shirts', value: 40, color: '#6236FF' }, { name: 'T-Shirts', value: 25, color: '#3B82F6' }, { name: 'Jeans', value: 20, color: '#F43F5E' }, { name: 'Jackets', value: 15, color: '#F59E0B' }];
 const paymentSummary = [{ name: 'Cash', value: 45230, color: '#10B981' }, { name: 'UPI', value: 35620, color: '#3B82F6' }, { name: 'Card', value: 25400, color: '#A855F7' }, { name: 'Net Banking', value: 19180, color: '#F59E0B' }];
-const stats = [{ title: "Total Sales", value: "₹ 1,25,430", trend: "12.5%", icon: <TrendingUp />, color: "#A855F7" }, { title: "Total Orders", value: "320", trend: "8.3%", icon: <ShoppingBag />, color: "#8B5CF6" }, { title: "Total Customer", value: "560", trend: "15.2%", icon: <Group />, color: "#3B82F6" }, { title: "Total Profit", value: "₹ 35,430", trend: "10.1%", icon: <BarChart />, color: "#EC4899" }, { title: "Total Products", value: "1,245", sub: "Products in store", icon: <Inventory />, color: "#6366F1" }];
+
+const stats = [{ title: "Total Sales", trend: "12.5%", icon: <TrendingUp />, color: "#A855F7" },
+{ title: "Total Orders", value: "320", icon: <ShoppingBag />, color: "#8B5CF6" },
+{ title: "Total Customer", value: "560", icon: <Group />, color: "#3B82F6" },
+{ title: "Total Profit", value: "₹ 35,430", icon: <BarChart />, color: "#EC4899" },
+{ title: "Total Products", value: "1,245", sub: "Products in store", icon: <Inventory />, color: "#6366F1" }
+];
 
 const DashboardPage = () => {
 
@@ -224,7 +230,7 @@ const DashboardPage = () => {
                     variant="subtitle1"
                     sx={{ fontWeight: 800 }}
                   >
-                    {s.value}
+                    0
                   </Typography>
                 </Box>
               </Paper>
@@ -259,7 +265,7 @@ const DashboardPage = () => {
           >
             <Box
               sx={{
-                boxShadow: '0px 10px 15px -3px rgba(156, 163, 175, 0.3)', // Box shadow consistent rakhi hai
+                boxShadow: '0px 10px 15px -3px rgba(156, 163, 175, 0.3)',
                 borderRadius: '16px',
                 height: '100%',
               }}

@@ -1,8 +1,9 @@
 import React from 'react';
-import { 
-  Paper, Typography, Box, List, ListItemButton, ListItemIcon, ListItemText 
+import {
+  Paper, Typography, Box, List, ListItemButton, ListItemIcon, ListItemText
 } from '@mui/material';
-import { ReceiptLong, PersonAddAlt, ShoppingCart, LibraryAdd, ChevronRight 
+import {
+  ReceiptLong, PersonAddAlt, ShoppingCart, LibraryAdd, ChevronRight
 } from '@mui/icons-material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
@@ -28,8 +29,8 @@ const QuickActions = () => {
       }}
     >
       {/* Title */}
-      <Typography 
-        variant="h6" 
+      <Typography
+        variant="h6"
         sx={{ fontWeight: 800, fontSize: '1rem', mb: 2, color: '#111827' }}
       >
         Quick Actions
@@ -64,8 +65,8 @@ const QuickActions = () => {
                   width: 36,
                   height: 36,
                   borderRadius: '10px',
-                  bgcolor: action.color, 
-                  color: 'white', 
+                  bgcolor: action.color,
+                  color: 'white',
                 }}
               >
                 {action.icon}
@@ -83,8 +84,8 @@ const QuickActions = () => {
             />
 
             {/* Right Arrow */}
-            <ChevronRight 
-              sx={{ color: '#9CA3AF', fontSize: 18 }} 
+            <ChevronRight
+              sx={{ color: '#9CA3AF', fontSize: 18 }}
             />
           </ListItemButton>
         ))}

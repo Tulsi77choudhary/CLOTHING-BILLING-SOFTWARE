@@ -29,7 +29,7 @@ import Customers from "./components/Customers/Customers";
 import Sales from "./components/Sales/Sales";
 import Purchases from "./components/Purchase/Purchases";
 import Inventory from "./components/Inventory/Inventory";
-import Reports from "./components/Reports";
+import Reports from "./components/Report/Reports";
 import Offers from "./components/Offer/Offers";
 import Expenses from "./components/Expenses/Expenses";
 import { Icon, User } from "lucide-react";

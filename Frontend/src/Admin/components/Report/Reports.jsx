@@ -27,10 +27,13 @@ import {
 
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
+import renderReport from './renderReport';
+
 const Reports = () => {
   const [openExport, setOpenExport] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [exportFormat, setExportFormat] = useState("excel");
+  const [activeReport, setActiveReport] = useState("Sales Report");
 
   const handleOpenExport = () => setOpenExport(true);
   const handleCloseExport = () => setOpenExport(false);
@@ -47,31 +50,38 @@ const Reports = () => {
   ];
 
   const sidebarItems = [
-    { label: 'Sales Report', icon: TrendingUp, active: true },
-    { label: 'Purchase Report', icon: ShoppingBag, active: false },
-    { label: 'Stock Report', icon: BoxIcon, active: false }, // Fixed Box to BoxIcon
-    { label: 'Profit & Loss', icon: FileText, active: false },
-    { label: 'Top Selling Products', icon: TrendingUp, active: false },
-    { label: 'Customer Report', icon: Users, active: false },
-  ];
-
-  const kpis = [
-    { label: 'Total Sales', value: '₹ 1,25,430', color: 'text-green-600' },
-    { label: 'Total Purchases', value: '₹ 93,250', color: 'text-slate-800' },
-    { label: 'Total Profit', value: '₹ 32,180', color: 'text-green-600' },
-    { label: 'Total Orders', value: '320', color: 'text-slate-800' },
+    { label: 'Sales Report', icon: TrendingUp },
+    { label: 'Purchase Report', icon: ShoppingBag },
+    { label: 'Stock Report', icon: BoxIcon },
+    { label: 'Profit & Loss', icon: FileText },
+    { label: 'Top Selling Products', icon: TrendingUp },
+    { label: 'Customer Report', icon: Users },
   ];
 
   // Sidebar Content Component (Reused for Desktop and Mobile Drawer)
   const SidebarContent = () => (
     <div className="w-64 border-r border-slate-100 p-6 flex flex-col gap-2 h-full bg-white">
-      <h2 className="text-xl font-bold mb-6 px-4">Reports</h2>
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-xl font-bold">Reports</h2>
+
+        <Box sx={{ display: { xs: "block", lg: "none" } }}>
+          <IconButton onClick={() => setMobileMenuOpen(false)}>
+            <CloseIcon />
+          </IconButton>
+        </Box>
+      </div>
+
       {sidebarItems.map((item, index) => (
         <button
           key={index}
-          className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-            item.active ? 'bg-blue-50 text-blue-700' : 'text-slate-500 hover:bg-slate-50'
-          }`}
+          onClick={() => {
+            setActiveReport(item.label);
+            setMobileMenuOpen(false);
+          }}
+          className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${activeReport === item.label
+            ? "bg-blue-50 text-blue-700"
+            : "text-slate-500 hover:bg-slate-50"
+            }`}
         >
           <item.icon size={18} />
           {item.label}
@@ -81,18 +91,26 @@ const Reports = () => {
   );
 
   return (
+
     <div className="flex flex-col lg:flex-row bg-white min-h-screen">
-      
+
       {/* --- DESKTOP SIDEBAR --- */}
       <div className="hidden lg:block">
         <SidebarContent />
       </div>
 
       {/* --- MOBILE DRAWER SIDEBAR --- */}
-      <Drawer open={mobileMenuOpen} onClose={toggleMobileMenu}>
-        <div onClick={toggleMobileMenu} className="h-full">
-          <SidebarContent />
-        </div>
+      <Drawer
+        anchor="left"
+        open={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+        PaperProps={{
+          sx: {
+            width: 280,
+          },
+        }}
+      >
+        <SidebarContent />
       </Drawer>
 
       {/* === EXPORT POPUP DIALOG === */}
@@ -202,11 +220,11 @@ const Reports = () => {
 
       {/* === MAIN CONTENT AREA === */}
       <div className="flex-1 p-4 md:p-8 bg-slate-50/30 w-full overflow-hidden">
-        
+
         {/* Mobile Header Bar */}
         <div className="flex lg:hidden justify-between items-center mb-6 border-b pb-4">
           <h2 className="text-xl font-bold text-slate-800">Reports</h2>
-          <button 
+          <button
             onClick={toggleMobileMenu}
             className="p-2 border border-slate-200 rounded-lg hover:bg-slate-50 text-slate-700"
           >
@@ -221,12 +239,12 @@ const Reports = () => {
           </div>
           <div className="flex items-center gap-2 bg-white border border-slate-200 px-4 py-2 rounded-lg text-sm justify-center sm:justify-start">
             <Calendar size={16} className="text-slate-400" />
-            01/05/2024 - 31/05/2024
+            01/05/2026 - 31/05/2026
           </div>
           <button className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 w-full sm:w-auto">
             Generate
           </button>
-          <button 
+          <button
             className="flex items-center justify-center gap-2 border border-slate-200 bg-white px-4 py-2 rounded-lg text-sm hover:bg-slate-50 w-full sm:w-auto"
             onClick={handleOpenExport}
           >
@@ -234,50 +252,9 @@ const Reports = () => {
           </button>
         </div>
 
-        {/* KPI Grid (1 Column on Mobile, 2 on Tablet, 4 on Desktop) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
-          {kpis.map((kpi, i) => (
-            <div key={i} className="bg-white p-5 md:p-6 rounded-xl border border-slate-100 shadow-sm">
-              <p className="text-slate-500 text-xs font-semibold uppercase tracking-wider">{kpi.label}</p>
-              <h3 className={`text-lg md:text-xl font-bold mt-2 ${kpi.color}`}>{kpi.value}</h3>
-            </div>
-          ))}
-        </div>
-
-        {/* Sales Chart Section */}
-        <div className="bg-white p-4 md:p-6 rounded-xl border border-slate-100 shadow-sm">
-          <h4 className="text-sm font-bold text-slate-800 mb-6 uppercase tracking-wide">Sales Overview</h4>
-          <div className="h-64 sm:h-72 w-full overflow-x-auto">
-            <ResponsiveContainer width="100%" height="100%" minWidth={400}>
-              <BarChart data={chartData}>
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                  vertical={false}
-                  stroke="#f1f5f9"
-                />
-                <XAxis
-                  dataKey="name"
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fill: '#94a3b8', fontSize: 11 }}
-                />
-                <YAxis
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fill: '#94a3b8', fontSize: 11 }}
-                />
-                <Tooltip
-                  cursor={{ fill: '#f8fafc' }}
-                />
-                <Bar
-                  dataKey="sales"
-                  fill="#3b82f6"
-                  radius={[4, 4, 0, 0]}
-                  barSize={25}
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+        {/* Report Content Area */}
+        <div className="mt-6">
+          {renderReport(activeReport)}
         </div>
       </div>
     </div>

@@ -14,10 +14,19 @@ import CloseIcon from '@mui/icons-material/Close';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import { Search, Filter, Plus, Download, Eye, Edit, Trash2, Save, UserPlus, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from "react-redux";
+import { getAllCustomers } from "../../../State/Customer/Action";
 
 const CustomerTable = () => {
+
+  const { customers, loading, error } = useSelector((state) => state.customer);
+  console.log("===========", customers);
+
   const [openExport, setOpenExport] = useState(false);
-  const [openAddCustomer, setOpenAddCustomer] = useState(false); // Modal control state
+  const [openAddCustomer, setOpenAddCustomer] = useState(false);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // Form Data State
   const [formData, setFormData] = useState({
@@ -27,9 +36,13 @@ const CustomerTable = () => {
     email: "",
     total: "",
     outstanding: "",
-    group: "Regular",
+    customerGroup: "",
     status: "Active"
   });
+
+  useEffect(() => {
+    dispatch(getAllCustomers());
+  }, [dispatch]);
 
   // Jab bhi Add Customer modal khulega, ek random dynamic Customer ID banega
   useEffect(() => {
@@ -41,7 +54,7 @@ const CustomerTable = () => {
         email: "",
         total: "",
         outstanding: "",
-        group: "Regular",
+        customerGroup: "",
         status: "Active"
       });
     }
@@ -64,18 +77,9 @@ const CustomerTable = () => {
   const handleSubmitCustomer = (e) => {
     e.preventDefault();
     console.log("Saving New Customer Data:", formData);
-    // Yahan aap apni database state/API logic append kar sakte hain
     handleCloseAddCustomer();
   };
 
-  const customers = [
-    { id: 1, customerId: 'CU0001', name: 'Ravi Kumar', phone: '+91 9876543210', email: 'ravi@gmail.com', group: 'Regular', totalPurchase: '₹ 12,450', outstanding: '₹ 1,250', status: 'Active' },
-    { id: 2, customerId: 'CU0002', name: 'Sunita Sharma', phone: '+91 8765432109', email: 'sunita@gmail.com', group: 'Premium', totalPurchase: '₹ 8,760', outstanding: '₹ 0', status: 'Active' },
-    { id: 3, customerId: 'CU0003', name: 'Amit Patel', phone: '+91 9812345678', email: 'amit@gmail.com', group: 'Regular', totalPurchase: '₹ 4,500', outstanding: '₹ 500', status: 'Active' },
-    { id: 4, customerId: 'CU0004', name: 'Priya Singh', phone: '+91 9567891234', email: 'priya@gmail.com', group: 'Premium', totalPurchase: '₹ 22,100', outstanding: '₹ 0', status: 'Active' },
-  ];
-
-  const navigate = useNavigate();
 
   return (
     <div className="p-4 bg-white rounded-xl shadow-sm border border-gray-100 mt-2">
@@ -408,7 +412,7 @@ const CustomerTable = () => {
                 <td className="px-4 py-4">
                   <span className={`px-3 py-1 rounded-full text-xs font-medium ${customer.group === 'Premium' ? 'bg-purple-50 text-purple-600' : 'bg-blue-50 text-blue-600'
                     }`}>
-                    {customer.group}
+                    {customer.customerGroup}
                   </span>
                 </td>
                 <td className="px-4 py-4 font-medium">{customer.totalPurchase}</td>

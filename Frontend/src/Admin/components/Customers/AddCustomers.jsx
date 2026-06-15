@@ -1,36 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { UserPlus, Save, X } from "lucide-react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { addCustomer } from "../../../State/Customer/Action";
 
 const AddCustomerModal = ({ isOpen, onClose, onSave }) => {
+
+  const dispatch = useDispatch();
+
+  if (!isOpen) return null;
+
   const [formData, setFormData] = useState({
     customerId: "",
     name: "",
     phone: "",
     email: "",
-    total: "",
+    totalPurchase: "",
     outstanding: "",
-    group: "Regular",
-    status: "Active"
+    customerGroup: "REGULAR",
+    status: "ACTIVE",
   });
-
-  useEffect(() => {
-    if (isOpen) {
-      setFormData((prev) => ({
-        ...prev,
-        customerId: "CU" + Math.floor(1000 + Math.random() * 9000),
-        name: "",
-        phone: "",
-        email: "",
-        total: "",
-        outstanding: "",
-        group: "Regular",
-        status: "Active"
-      }));
-    }
-  }, [isOpen]);
-
-  if (!isOpen) return null;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -137,8 +125,8 @@ const AddCustomerModal = ({ isOpen, onClose, onSave }) => {
               <div>
                 <label className="block text-xs font-semibold text-gray-600 mb-1.5">Customer Group</label>
                 <select
-                  name="group"
-                  value={formData.group}
+                  name="customerGroup"
+                  value={formData.customerGroup}
                   onChange={handleChange}
                   className="w-full px-3 py-2 text-sm bg-gray-50/50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#9155FD]/10 focus:border-[#9155FD] text-gray-700 cursor-pointer"
                 >
@@ -151,13 +139,12 @@ const AddCustomerModal = ({ isOpen, onClose, onSave }) => {
               <div>
                 <label className="block text-xs font-semibold text-gray-600 mb-1.5">Profile Status</label>
                 <select
-                  name="status"
-                  value={formData.status}
+                  name="customerGroup"
+                  value={formData.customerGroup}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 text-sm bg-gray-50/50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#9155FD]/10 focus:border-[#9155FD] text-gray-700 cursor-pointer"
                 >
-                  <option value="Active">Active</option>
-                  <option value="Inactive">Inactive</option>
+                  <option value="REGULAR">Regular</option>
+                  <option value="PREMIUM">Premium</option>
                 </select>
               </div>
 
@@ -166,7 +153,7 @@ const AddCustomerModal = ({ isOpen, onClose, onSave }) => {
                 <label className="block text-xs font-semibold text-gray-600 mb-1.5">Total Purchase (₹)</label>
                 <input
                   type="number"
-                  name="total"
+                  name="totalPurchase"
                   value={formData.total}
                   onChange={handleChange}
                   placeholder="e.g. 5000"
