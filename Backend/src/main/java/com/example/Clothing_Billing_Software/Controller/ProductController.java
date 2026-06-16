@@ -1,5 +1,6 @@
 package com.example.Clothing_Billing_Software.Controller;
 
+import com.example.Clothing_Billing_Software.DTO.ProductRequest;
 import com.example.Clothing_Billing_Software.DTO.SearchDto;
 import com.example.Clothing_Billing_Software.Entity.Product;
 //import com.example.Clothing_Billing_Software.Service.ProductExcelService;
@@ -36,10 +37,11 @@ public class ProductController {
     @Autowired
     private ProductExcelService excelService;
 
-    @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
-        Product savedProduct = productService.createProduct(product);
-        return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Product> createProduct(@ModelAttribute ProductRequest request) {
+        return ResponseEntity.ok(
+                productService.createProduct(request)
+        );
     }
 
     @GetMapping ("/products")
@@ -81,9 +83,9 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody Product productDetails) {
+    public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody @ModelAttribute ProductRequest request) {
         try {
-            Product updatedProduct = productService.updateProduct(id, productDetails);
+            Product updatedProduct = productService.updateProduct(id, request);
             return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
 
         } catch (ResourceNotFoundException e) {

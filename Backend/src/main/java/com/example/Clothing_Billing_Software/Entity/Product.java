@@ -3,6 +3,7 @@ package com.example.Clothing_Billing_Software.Entity;
 import com.alibaba.excel.annotation.ExcelProperty;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Entity
 @Table(name = "products")
@@ -28,6 +29,7 @@ public class Product {
     private Double price;
     private Integer stock;
     private String status;
+    private String imageUrl;
 
 //    @Column(unique = true)
 //    private Integer barcode;

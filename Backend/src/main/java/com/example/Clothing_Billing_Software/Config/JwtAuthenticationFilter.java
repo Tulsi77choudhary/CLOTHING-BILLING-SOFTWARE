@@ -29,28 +29,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        String path = request.getRequestURI();
-
-        // 1. Clean Path Normalization Bypass Check
-        // Kise bhi routing anomaly se bachne ke liye path strings ko completely lowercase normalize karke verify karein
-        if (path != null && (path.toLowerCase().contains("/api/auth") || path.toLowerCase().contains("/api/products"))) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        // 2. React CORS Pre-flight mapping integration check
+        // 1. Skip preflight
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
-            response.setStatus(HttpServletResponse.SC_OK);
             filterChain.doFilter(request, response);
             return;
         }
 
         final String authHeader = request.getHeader("Authorization");
+
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json");
-            response.getWriter().write("{\"error\": \"Missing or invalid Authorization header\"}");
-            return;
+            filterChain.doFilter(request, response);
+            return; // let Spring Security handle it
         }
 
         final String token = authHeader.substring(7);
@@ -59,24 +48,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             username = jwtUtil.extractUsername(token);
         } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json");
-            response.getWriter().write("{\"error\": \"Invalid or expired JWT token\"}");
+            filterChain.doFilter(request, response);
             return;
         }
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (username != null &&
+                SecurityContextHolder.getContext().getAuthentication() == null) {
+
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
             if (jwtUtil.validateToken(token, userDetails)) {
+
                 UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        new UsernamePasswordAuthenticationToken(
+                                userDetails,
+                                null,
+                                userDetails.getAuthorities()
+                        );
+
+                authToken.setDetails(
+                        new WebAuthenticationDetailsSource().buildDetails(request)
+                );
+
                 SecurityContextHolder.getContext().setAuthentication(authToken);
-            } else {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.setContentType("application/json");
-                response.getWriter().write("{\"error\": \"Invalid JWT token\"}");
-                return;
             }
         }
 
