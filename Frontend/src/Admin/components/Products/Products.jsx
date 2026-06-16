@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { API_BASE_URL } from '../../../config/apiConfig';
 import CloseIcon from "@mui/icons-material/Close";
 import { Link } from "react-router-dom";
 
@@ -77,10 +78,6 @@ const Product = () => {
 
   const auth = useSelector(store => store.auth);
   const { products, totalCount, filter, loading, error, excelLoading } = useSelector((store) => store.product);
-
-  console.log("products list-----", products);
-  console.log("total product count++++", totalCount);
-  console.log("=== ", filter);
 
   const [searchParams] = useSearchParams();
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
@@ -717,9 +714,19 @@ const Product = () => {
                   <TableCell>
                     <Avatar
                       variant="rounded"
-                      src={row.imageUrl}
+                      src={
+                        row.imageUrl
+                          ? row.imageUrl.startsWith("http")
+                            ? row.imageUrl
+                            : row.imageUrl.startsWith("/")
+                              ? `${API_BASE_URL}${row.imageUrl}`       
+                              : `${API_BASE_URL}/${row.imageUrl}`       
+                          : ""
+                      }
                       sx={{ width: 40, height: 40, bgcolor: "#F3F4F6" }}
-                    />
+                    >
+                      <InventoryIcon fontSize="small" color="action" />
+                    </Avatar>
                   </TableCell>
 
                   <TableCell>

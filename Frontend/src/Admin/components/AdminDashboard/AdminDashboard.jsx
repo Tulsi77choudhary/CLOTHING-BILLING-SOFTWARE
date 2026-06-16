@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SalesChart from './SalesChart';
 import { useNavigate } from 'react-router-dom';
 import CategoryChart from './CategoryChart';
@@ -20,8 +20,10 @@ import {
   PieChart, Pie, Cell
 } from 'recharts';
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import QuickActions from './QuickActions';
+
+import { getTotalProductCount } from '../../../State/Product/Action';
 
 const PRIMARY_PURPLE = "#6236FF";
 const SUCCESS_GREEN = "#10B981";
@@ -32,18 +34,15 @@ const lineData = [{ name: '01 May', value: 10000 }, { name: '06 May', value: 150
 const categoryData = [{ name: 'Shirts', value: 40, color: '#6236FF' }, { name: 'T-Shirts', value: 25, color: '#3B82F6' }, { name: 'Jeans', value: 20, color: '#F43F5E' }, { name: 'Jackets', value: 15, color: '#F59E0B' }];
 const paymentSummary = [{ name: 'Cash', value: 45230, color: '#10B981' }, { name: 'UPI', value: 35620, color: '#3B82F6' }, { name: 'Card', value: 25400, color: '#A855F7' }, { name: 'Net Banking', value: 19180, color: '#F59E0B' }];
 
-const stats = [{ title: "Total Sales", trend: "12.5%", icon: <TrendingUp />, color: "#A855F7" },
-{ title: "Total Orders", value: "320", icon: <ShoppingBag />, color: "#8B5CF6" },
-{ title: "Total Customer", value: "560", icon: <Group />, color: "#3B82F6" },
-{ title: "Total Profit", value: "₹ 35,430", icon: <BarChart />, color: "#EC4899" },
-{ title: "Total Products", value: "1,245", sub: "Products in store", icon: <Inventory />, color: "#6366F1" }
-];
+
 
 const DashboardPage = () => {
 
   const auth = useSelector(store => store.auth);
-  console.log("Current Redux Auth State:", auth);
+  const { totalCount } = useSelector((store) => store.product);
+  console.log("Current Redux Auth State:", totalCount);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const theme = useTheme();
   const [open, setOpen] = useState(false);
@@ -60,6 +59,17 @@ const DashboardPage = () => {
     handleCloseUserMenu();
     console.log("Logging out...");
   };
+
+  useEffect(() => {
+    dispatch(getTotalProductCount());
+  }, [dispatch]);
+
+  const stats = [{ title: "Total Sales", trend: "12.5%", icon: <TrendingUp />, color: "#A855F7" },
+  { title: "Total Orders", value: "320", icon: <ShoppingBag />, color: "#8B5CF6" },
+  { title: "Total Customer", value: "560", icon: <Group />, color: "#3B82F6" },
+  { title: "Total Profit", value: "₹ 35,430", icon: <BarChart />, color: "#EC4899" },
+  { title: "Total Products", value: `${totalCount}`, icon: <Inventory />, color: "#6366F1" }
+  ];
 
   return (
     <Box sx={{ flexGrow: 1, bgcolor: '#F8F9FA', minHeight: '100vh' }}>
@@ -230,7 +240,7 @@ const DashboardPage = () => {
                     variant="subtitle1"
                     sx={{ fontWeight: 800 }}
                   >
-                    0
+                    {s.value || s.trend}
                   </Typography>
                 </Box>
               </Paper>

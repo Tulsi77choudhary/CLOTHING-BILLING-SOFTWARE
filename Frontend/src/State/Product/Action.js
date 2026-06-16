@@ -22,7 +22,12 @@ export const createProduct = (productData) => async (dispatch) => {
 
         const response = await axios.post(
             `${API_BASE_URL}/api/products`,
-            productData
+            productData,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                }
+            }
         );
 
         dispatch({
@@ -92,7 +97,7 @@ export const updateProduct = (productId, productData) => async (dispatch) => {
 
         const response = await axios.put(`${API_BASE_URL}/api/products/${productId}`, productData, {
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "multipart/form-data",
             }
         });
 

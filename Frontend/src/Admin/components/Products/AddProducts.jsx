@@ -7,6 +7,7 @@ const AddProducts = ({ onClose }) => {
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.product);
 
+
   const [product, setProduct] = useState({
     name: '',
     sku: '',
@@ -17,10 +18,11 @@ const AddProducts = ({ onClose }) => {
     status: '',
     stockQuantity: '',
     size: '',
-    image: null
   });
 
   const [previewUrl, setPreviewUrl] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,15 +32,29 @@ const AddProducts = ({ onClose }) => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setProduct((prev) => ({ ...prev, image: file }));
+      setImageFile(file);
       setPreviewUrl(URL.createObjectURL(file));
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Submitting Product Information:', product);
-    dispatch(createProduct(product));
+    const formData = new FormData();
+
+    formData.append("name", product.name);
+    formData.append("sku", product.sku);
+    formData.append("category", product.category);
+    formData.append("brand", product.brand);
+    formData.append("purchasePrice", product.purchasePrice);
+    formData.append("sellingPrice", product.sellingPrice);
+    formData.append("status", product.status);
+    formData.append("stockQuantity", product.stockQuantity);
+    formData.append("size", product.size);
+
+    if (imageFile) {
+      formData.append("image", imageFile);
+    }
+    dispatch(createProduct(formData));
   };
 
   return (
@@ -129,10 +145,15 @@ const AddProducts = ({ onClose }) => {
               className="w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-gray-800"
             >
               <option value="" disabled>Select Primary Category</option>
-              <option value="apparel">Apparel & Clothing</option>
-              <option value="footwear">Footwear</option>
-              <option value="accessories">Accessories</option>
-              <option value="electronics">Electronics</option>
+
+              <option value="T_SHIRTS">T-Shirts</option>
+              <option value="SHIRTS">Shirts</option>
+              <option value="JEANS">Jeans</option>
+              <option value="JACKETS">Jackets</option>
+              <option value="TROUSERS">Trousers</option>
+              <option value="HOODIES">Hoodies</option>
+              <option value="CAPS">Caps</option>
+              <option value="ACCESSORIES">Accessories</option>
             </select>
           </div>
         </div>
@@ -167,11 +188,11 @@ const AddProducts = ({ onClose }) => {
               <span className="text-xs text-gray-400 block mb-1">Selling Price</span>
               <input
                 type="number"
-                name="sellingPrice" // कैमलकेस नाम किया
+                name="sellingPrice"
                 required
                 min="0"
                 step="0.01"
-                value={product.sellingPrice} // सही स्टेट वैल्यू से कनेक्ट किया
+                value={product.sellingPrice}
                 onChange={handleChange}
                 placeholder="0.00"
                 className="w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-gray-800"
@@ -238,6 +259,16 @@ const AddProducts = ({ onClose }) => {
           <label className="text-sm font-medium text-gray-600 col-span-1 pt-2">
             Product Image
           </label>
+
+          <div className="col-span-3">
+            {previewUrl ? (
+              <div className="relative w-24 h-24 rounded border overflow-hidden">
+                <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
+              </div>
+            ) : (
+              <p className="text-xs text-gray-400">No image selected</p>
+            )}
+          </div>
           <div className="col-span-3">
             <div className="border-2 border-dashed border-gray-200 rounded-lg p-4 flex flex-col items-center justify-center hover:bg-gray-50 transition-colors relative cursor-pointer group min-h-[120px]">
               <input
@@ -246,9 +277,9 @@ const AddProducts = ({ onClose }) => {
                 onChange={handleFileChange}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
               />
-              {previewUrl ? (
+              {product.imageUrl ? (
                 <div className="relative w-24 h-24 rounded border border-gray-100 overflow-hidden">
-                  <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
+                  <img src={product.imageUrl} alt="Preview" className="w-full h-full object-cover" />
                 </div>
               ) : (
                 <div className="text-center flex flex-col items-center">
